@@ -127,7 +127,7 @@ export default function SidebarContent({
           active={nav === "workspace"}
           className={cn(
             "font-medium rounded-lg transition-all",
-            nav === "workspace" && "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/50"
+            nav === "workspace" && "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs"
           )}
           onClick={() => {
             setNav("workspace");
@@ -143,7 +143,7 @@ export default function SidebarContent({
           active={nav === "analytics"}
           className={cn(
             "font-medium rounded-lg transition-all",
-            nav === "analytics" && "bg-blue-50/90 text-blue-700 border border-blue-300 shadow-xs dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-700"
+            nav === "analytics" && "bg-blue-50/90 text-blue-700 border border-blue-300 shadow-xs"
           )}
           onClick={() => {
             setNav("analytics");
@@ -159,7 +159,7 @@ export default function SidebarContent({
           active={nav === "creative-space"}
           className={cn(
             "font-medium rounded-lg transition-all",
-            nav === "creative-space" && "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/50"
+            nav === "creative-space" && "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs"
           )}
           onClick={() => {
             setNav("creative-space");

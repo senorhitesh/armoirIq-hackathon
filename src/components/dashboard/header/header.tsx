@@ -213,8 +213,8 @@ export default function Header() {
           className={cn(
             "flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold transition-all shadow-2xs",
             guardActive
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-400"
-              : "border-border bg-muted/60 text-muted-foreground hover:bg-muted"
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-slate-200 bg-slate-100/70 text-slate-600 hover:bg-slate-100"
           )}
         >
           <span

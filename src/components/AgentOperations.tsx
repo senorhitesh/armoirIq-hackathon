@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { AgentRole, AgentRunRecord } from '@/lib/types';
-import { Play, ShieldAlert, ShieldCheck, Bug, Terminal, ArrowRight, CheckCircle2, XCircle, AlertTriangle, Sparkles, Mic } from 'lucide-react';
+import { Play, ShieldAlert, Terminal, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 interface AgentOperationsProps {
   onRunScenario: (scenario: 'allowed_flow' | 'policy_block' | 'injection_block' | 'custom', prompt?: string, agent?: AgentRole) => Promise<void>;
@@ -15,7 +15,6 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
   onRunScenario,
   isRunning,
   latestRun,
-  onSelectPost
 }) => {
   const [selectedAgent, setSelectedAgent] = useState<AgentRole>('creator');
   const [customGoal, setCustomGoal] = useState<string>('Draft and score a viral contrarian post for LinkedIn');
@@ -27,20 +26,20 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
   };
 
   return (
-    <div className="glass-panel rounded-2xl p-5 border border-slate-800/80 mb-8 shadow-xl">
+    <div className="rounded-2xl p-5 border border-slate-200 bg-white mb-8 shadow-xs">
       
       {/* Header & Description */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200 gap-3">
         <div>
           <div className="flex items-center space-x-2">
-            <div className="p-1.5 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
+            <div className="p-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-600">
               <Terminal className="w-4 h-4" />
             </div>
-            <h2 className="text-base font-bold text-white tracking-wide">
+            <h2 className="text-base font-bold text-slate-900 tracking-wide">
               Governed Multi-Agent Operations Console
             </h2>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Every plan step is cryptographically signed by ArmorIQ before execution.
           </p>
         </div>
@@ -53,10 +52,10 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
             onClick={() => onRunScenario('allowed_flow')}
             disabled={isRunning}
             id="btn-demo-allowed"
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-500/40 text-emerald-300 transition-all shadow-lg shadow-emerald-950/40 disabled:opacity-50"
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 text-emerald-700 transition-all shadow-2xs disabled:opacity-50"
             title="Full Governed Flow: Draft -> Virality Score -> Approval Request"
           >
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
             <span>1. Run Allowed Flow</span>
           </button>
 
@@ -65,10 +64,10 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
             onClick={() => onRunScenario('policy_block')}
             disabled={isRunning}
             id="btn-demo-policy-block"
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-rose-950/70 hover:bg-rose-900/80 border border-rose-500/40 text-rose-300 transition-all shadow-lg shadow-rose-950/40 disabled:opacity-50"
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-rose-50 hover:bg-rose-100/80 border border-rose-200 text-rose-700 transition-all shadow-2xs disabled:opacity-50"
             title="Creator attempts publish_post -> Denied by ArmorIQ Policy Matrix"
           >
-            <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+            <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
             <span>2. Demo Policy Block</span>
           </button>
 
@@ -77,10 +76,10 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
             onClick={() => onRunScenario('injection_block')}
             disabled={isRunning}
             id="btn-demo-injection-block"
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-amber-950/70 hover:bg-amber-900/80 border border-amber-500/40 text-amber-300 transition-all shadow-lg shadow-amber-950/40 disabled:opacity-50"
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-amber-50 hover:bg-amber-100/80 border border-amber-200 text-amber-700 transition-all shadow-2xs disabled:opacity-50"
             title="Scraped prompt injection commands delete_drafts -> Blocked by Merkle Intent Mismatch"
           >
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
             <span>3. Demo Injection Block</span>
           </button>
 
@@ -91,14 +90,14 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
       <form onSubmit={handleCustomSubmit} className="mt-4 flex flex-col sm:flex-row items-center gap-3">
         
         {/* Agent Role Selector */}
-        <div className="w-full sm:w-auto flex items-center space-x-1 p-1 bg-slate-900/90 rounded-xl border border-slate-800 text-xs font-medium">
+        <div className="w-full sm:w-auto flex items-center space-x-1 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-medium">
           <button
             type="button"
             onClick={() => setSelectedAgent('strategist')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               selectedAgent === 'strategist'
-                ? 'bg-cyan-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Strategist
@@ -108,8 +107,8 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
             onClick={() => setSelectedAgent('creator')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               selectedAgent === 'creator'
-                ? 'bg-violet-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Creator
@@ -119,8 +118,8 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
             onClick={() => setSelectedAgent('publisher')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               selectedAgent === 'publisher'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Publisher
@@ -135,7 +134,7 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
             value={customGoal}
             onChange={(e) => setCustomGoal(e.target.value)}
             placeholder="Instruct the agent (e.g., 'Draft contrarian LinkedIn ad with metrics score')..."
-            className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono"
             disabled={isRunning}
           />
         </div>
@@ -145,7 +144,7 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
           type="submit"
           id="btn-execute-agent-goal"
           disabled={isRunning || !customGoal.trim()}
-          className="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white shadow-lg shadow-cyan-500/20 disabled:opacity-50 transition-all cursor-pointer"
+          className="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm disabled:opacity-50 transition-all cursor-pointer"
         >
           {isRunning ? (
             <>
@@ -164,74 +163,74 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
 
       {/* Live Run Execution Trace */}
       {latestRun && (
-        <div className="mt-5 p-4 rounded-xl bg-slate-950/80 border border-slate-800/90 space-y-3 animate-fadeIn">
+        <div className="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
           
           {/* Summary Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-200 gap-2">
             <div className="flex items-center space-x-2">
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+              <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700">
                 Plan Ref: {latestRun.armoriqPlanRef}
               </span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-800/60">
+              <span className="text-xs font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                 Merkle Root: {latestRun.merkleRoot.substring(0, 14)}...
               </span>
             </div>
 
             <div className="flex items-center space-x-2">
               {latestRun.status === 'completed' && (
-                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 flex items-center space-x-1">
+                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center space-x-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>ALL STEPS MERKLE VERIFIED</span>
                 </span>
               )}
               {latestRun.status === 'blocked' && (
-                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-950/80 text-rose-300 border border-rose-500/40 flex items-center space-x-1">
-                  <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 flex items-center space-x-1">
+                  <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
                   <span>ACTION BLOCKED BY ARMORIQ</span>
                 </span>
               )}
             </div>
           </div>
 
-          <p className="text-xs text-slate-200 font-medium">
+          <p className="text-xs text-slate-700 font-medium">
             {latestRun.summary}
           </p>
 
           {/* Steps List */}
           <div className="space-y-2 mt-2">
-            {latestRun.steps.map((step, idx) => (
+            {latestRun.steps.map((step) => (
               <div
                 key={step.stepId}
                 className={`p-3 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-2.5 transition-all ${
                   step.allowed
-                    ? 'bg-slate-900/50 border-emerald-500/20 hover:border-emerald-500/40'
-                    : 'bg-rose-950/30 border-rose-500/40 hover:border-rose-500/60'
+                    ? 'bg-white border-emerald-200 hover:border-emerald-300'
+                    : 'bg-rose-50/50 border-rose-200 hover:border-rose-300'
                 }`}
               >
                 <div className="flex items-start space-x-3">
                   <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 ${
-                    step.allowed ? 'bg-emerald-950 border border-emerald-500/40 text-emerald-400' : 'bg-rose-950 border border-rose-500/40 text-rose-400'
+                    step.allowed ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-rose-50 border border-rose-200 text-rose-700'
                   }`}>
                     {step.stepNumber}
                   </div>
 
                   <div>
                     <div className="flex items-center space-x-2 flex-wrap">
-                      <span className="text-xs font-mono font-bold text-white">
+                      <span className="text-xs font-mono font-bold text-slate-900">
                         {step.mcp}.{step.action}
                       </span>
                       {step.armoriqRuleMatched && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
                           {step.armoriqRuleMatched}
                         </span>
                       )}
                       {step.errorType && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-900/60 text-rose-300 border border-rose-700/60">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">
                           {step.errorType}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-xs text-slate-500 mt-0.5">
                       {step.reason}
                     </p>
                   </div>
@@ -240,16 +239,16 @@ export const AgentOperations: React.FC<AgentOperationsProps> = ({
                 <div className="flex items-center space-x-2 shrink-0 self-end md:self-center">
                   <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                     step.verified
-                      ? 'bg-cyan-950/60 text-cyan-400 border border-cyan-800/50'
-                      : 'bg-amber-950/60 text-amber-400 border border-amber-800/50'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : 'bg-amber-50 text-amber-700 border border-amber-200'
                   }`}>
                     {step.verified ? 'Merkle Proof: Valid' : 'Merkle Proof: Mismatch'}
                   </span>
 
                   <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
                     step.allowed
-                      ? 'bg-emerald-500/20 text-emerald-400'
-                      : 'bg-rose-500/20 text-rose-400'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-rose-100 text-rose-800'
                   }`}>
                     {step.allowed ? 'ALLOWED' : 'BLOCKED'}
                   </span>

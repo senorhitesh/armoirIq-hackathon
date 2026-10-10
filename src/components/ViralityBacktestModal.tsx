@@ -31,20 +31,20 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
   }));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="glass-panel rounded-2xl border border-cyan-500/30 w-full max-w-4xl p-6 bg-[#0b0f19]/95 max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white rounded-2xl border border-slate-200 w-full max-w-4xl p-6 max-h-[90vh] overflow-y-auto shadow-2xl">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-200">
           <div className="flex items-center space-x-3">
-            <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
+            <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-600">
               <TrendingUp className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-extrabold text-white">
+              <h3 className="text-lg font-extrabold text-slate-900">
                 Honest Virality Engine: Backtest Validation Report
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Evaluating predicted virality percentiles against actual real-world post engagement ranks
               </p>
             </div>
@@ -52,7 +52,7 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -60,11 +60,11 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
 
         {/* Top Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
               Spearman Rank Correlation
             </span>
-            <div className="text-2xl font-black text-emerald-400 mt-1">
+            <div className="text-2xl font-black text-emerald-600 mt-1">
               ρ = {report.spearmanCorrelation}
             </div>
             <p className="text-[11px] text-slate-500 mt-0.5">
@@ -72,11 +72,11 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
               Held-Out Sample Size
             </span>
-            <div className="text-2xl font-black text-white mt-1">
+            <div className="text-2xl font-black text-slate-900 mt-1">
               {report.sampleCount} Posts
             </div>
             <p className="text-[11px] text-slate-500 mt-0.5">
@@ -84,11 +84,11 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
               Statistical Significance
             </span>
-            <div className="text-sm font-bold text-cyan-300 mt-2">
+            <div className="text-sm font-bold text-blue-600 mt-2 font-mono">
               {report.confidencePValue}
             </div>
             <p className="text-[11px] text-slate-500 mt-0.5">
@@ -98,10 +98,10 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
         </div>
 
         {/* Backtest Chart */}
-        <div className="my-5 p-4 rounded-xl bg-slate-950/80 border border-slate-800">
+        <div className="my-5 p-4 rounded-xl bg-slate-50 border border-slate-200">
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center space-x-1.5">
-              <BarChart3 className="w-4 h-4 text-cyan-400" />
+            <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center space-x-1.5">
+              <BarChart3 className="w-4 h-4 text-blue-600" />
               <span>Actual Rank vs. Predicted Rank (Held-Out Posts)</span>
             </h4>
             <span className="text-[11px] text-slate-500">
@@ -112,24 +112,24 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={chartData} margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
-                <CartesianGrid stroke="#1e293b" strokeDasharray="3 3" />
+                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
                 <XAxis 
                   dataKey="actualRank" 
                   name="Actual Rank" 
-                  stroke="#64748b" 
-                  label={{ value: 'Actual Rank (1 = Best)', position: 'insideBottom', offset: -10, fill: '#94a3b8', fontSize: 11 }}
+                  stroke="#94a3b8" 
+                  label={{ value: 'Actual Rank (1 = Best)', position: 'insideBottom', offset: -10, fill: '#64748b', fontSize: 11 }}
                 />
                 <YAxis 
                   dataKey="predictedRank" 
                   name="Predicted Rank" 
-                  stroke="#64748b" 
-                  label={{ value: 'Predicted Rank', angle: -90, position: 'insideLeft', fill: '#94a3b8', fontSize: 11 }}
+                  stroke="#94a3b8" 
+                  label={{ value: 'Predicted Rank', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 11 }}
                 />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem', fontSize: '12px' }} 
-                  itemStyle={{ color: '#f1f5f9' }}
+                  contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '0.75rem', fontSize: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }} 
+                  itemStyle={{ color: '#0f172a' }}
                 />
-                <Scatter name="Posts" dataKey="predictedRank" fill="#06b6d4" />
+                <Scatter name="Posts" dataKey="predictedRank" fill="#2563eb" />
                 <Line type="monotone" dataKey="actualRank" stroke="#10b981" strokeDasharray="5 5" name="Ideal Correlation Line" dot={false} />
               </ComposedChart>
             </ResponsiveContainer>
@@ -137,26 +137,26 @@ export const ViralityBacktestModal: React.FC<ViralityBacktestModalProps> = ({
         </div>
 
         {/* Backtest Table */}
-        <div className="overflow-x-auto rounded-xl border border-slate-800 max-h-56 overflow-y-auto">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 max-h-56 overflow-y-auto bg-white">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase">
+            <thead className="bg-slate-100 border-b border-slate-200 text-slate-600 uppercase">
               <tr>
-                <th className="py-2 px-3">Post Title</th>
-                <th className="py-2 px-3">Actual Rank</th>
-                <th className="py-2 px-3">Predicted Rank</th>
-                <th className="py-2 px-3">Rank Delta</th>
-                <th className="py-2 px-3">Predicted Score</th>
+                <th className="py-2.5 px-3">Post Title</th>
+                <th className="py-2.5 px-3">Actual Rank</th>
+                <th className="py-2.5 px-3">Predicted Rank</th>
+                <th className="py-2.5 px-3">Rank Delta</th>
+                <th className="py-2.5 px-3">Predicted Score</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+            <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
               {report.items.map(item => (
-                <tr key={item.id} className="hover:bg-slate-900/40">
+                <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                   <td className="py-2 px-3 font-sans max-w-xs truncate">{item.title}</td>
-                  <td className="py-2 px-3 font-bold text-white">#{item.actualRank}</td>
-                  <td className="py-2 px-3 font-bold text-cyan-400">#{item.predictedRank}</td>
+                  <td className="py-2 px-3 font-bold text-slate-900">#{item.actualRank}</td>
+                  <td className="py-2 px-3 font-bold text-blue-600">#{item.predictedRank}</td>
                   <td className="py-2 px-3">
                     <span className={`px-1.5 py-0.5 rounded text-[10px] ${
-                      item.rankDelta <= 1 ? 'bg-emerald-950 text-emerald-400' : 'bg-slate-800 text-slate-400'
+                      item.rankDelta <= 1 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600'
                     }`}>
                       Δ {item.rankDelta}
                     </span>

@@ -1,22 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
 import Button from "@/components/_ui/button";
 import { useKanbanStore } from "@/stores/kanban-store";
 import { useUiStore } from "@/stores/ui-store";
 import { 
   TrendingUp, 
-  TrendingDown, 
   Eye, 
   MousePointerClick, 
   DollarSign, 
   Wallet, 
-  Calendar, 
   Filter, 
   CheckCircle2, 
-  Clock, 
-  AlertCircle, 
   Sparkles,
   ArrowUpRight,
   ExternalLink,
@@ -41,7 +36,7 @@ const RECENT_POSTS: RecentPostItem[] = [
     title: "ScaleFlow Q4 Contrarian Growth Ad",
     platform: "LinkedIn",
     status: "Live Published",
-    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800",
+    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
     views: "428,900",
     ctr: "5.12%",
     spend: "$3,240",
@@ -52,7 +47,7 @@ const RECENT_POSTS: RecentPostItem[] = [
     title: "Meta 3-Second Urgency Hook Script",
     platform: "Meta",
     status: "Pending Approval",
-    statusColor: "text-amber-700 bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800",
+    statusColor: "text-amber-700 bg-amber-50 border-amber-200",
     views: "312,400",
     ctr: "4.88%",
     spend: "$2,650",
@@ -63,7 +58,7 @@ const RECENT_POSTS: RecentPostItem[] = [
     title: "YouTube Shorts: AI Rogue Agent Leaks",
     platform: "YouTube",
     status: "Scheduled",
-    statusColor: "text-blue-700 bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800",
+    statusColor: "text-blue-700 bg-blue-50 border-blue-200",
     views: "184,200",
     ctr: "3.92%",
     spend: "$1,800",
@@ -74,7 +69,7 @@ const RECENT_POSTS: RecentPostItem[] = [
     title: "CAC Mythbuster 2026 Carousel",
     platform: "Instagram",
     status: "Live Published",
-    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800",
+    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
     views: "542,100",
     ctr: "4.65%",
     spend: "$4,120",
@@ -85,7 +80,7 @@ const RECENT_POSTS: RecentPostItem[] = [
     title: "Zero-Trust Attribution Explainer",
     platform: "LinkedIn",
     status: "Live Published",
-    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800",
+    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
     views: "294,000",
     ctr: "4.21%",
     spend: "$2,210",
@@ -96,7 +91,7 @@ const RECENT_POSTS: RecentPostItem[] = [
     title: "Autonomous Ad Scaling Deep-Dive",
     platform: "Meta",
     status: "Draft",
-    statusColor: "text-slate-600 bg-slate-100 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+    statusColor: "text-slate-600 bg-slate-100 border-slate-200",
     views: "81,200",
     ctr: "3.10%",
     spend: "$800",
@@ -116,9 +111,9 @@ const MONTHLY_BARS = [
 ];
 
 const UPCOMING_DELIVERIES = [
-  { id: "ORD-2341", item: "Meta Contrarian Lead Magnets", qty: "600 pcs", date: "Sep 29, 2026", status: "Scheduled", statusColor: "text-emerald-600 bg-emerald-50 border-emerald-200" },
-  { id: "ORD-2342", item: "LinkedIn Video Ad Series #3", qty: "400 pcs", date: "Sep 23, 2026", status: "On The Way", statusColor: "text-blue-600 bg-blue-50 border-blue-200" },
-  { id: "ORD-2343", item: "YouTube Shorts Script Batch", qty: "300 pcs", date: "Sep 21, 2026", status: "Scheduled", statusColor: "text-emerald-600 bg-emerald-50 border-emerald-200" },
+  { id: "ORD-2341", item: "Meta Contrarian Lead Magnets", qty: "600 pcs", date: "Sep 29, 2026", status: "Scheduled", statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+  { id: "ORD-2342", item: "LinkedIn Video Ad Series #3", qty: "400 pcs", date: "Sep 23, 2026", status: "On The Way", statusColor: "text-blue-700 bg-blue-50 border-blue-200" },
+  { id: "ORD-2343", item: "YouTube Shorts Script Batch", qty: "300 pcs", date: "Sep 21, 2026", status: "Scheduled", statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
   { id: "ORD-2344", item: "Retargeting Dynamic Creative", qty: "850 pcs", date: "Sep 18, 2026", status: "Completed", statusColor: "text-slate-600 bg-slate-100 border-slate-200" },
 ];
 
@@ -136,19 +131,19 @@ export default function Overview() {
   };
 
   return (
-    <div className="scroll-thin min-h-0 flex-1 overflow-y-auto bg-slate-50/60 p-4 lg:p-6 dark:bg-background">
+    <div className="scroll-thin min-h-0 flex-1 overflow-y-auto bg-slate-50/70 p-4 lg:p-6">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-6">
 
         {/* Top Header / Welcome Banner matching Image 2 */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
                 <span>Welcome, Campaign Commander</span>
                 <span className="text-xl">👋</span>
               </h1>
             </div>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
               Manage ad campaigns, track CTR delivery, and govern multi-agent spend — all in one place.
             </p>
           </div>
@@ -161,7 +156,7 @@ export default function Overview() {
                 setNav("workspace");
                 setTab("issues");
               }}
-              className="gap-1.5 font-medium text-xs shadow-2xs"
+              className="gap-1.5 font-medium text-xs shadow-2xs border border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
             >
               <span>Open Kanban</span>
               <ArrowUpRight className="size-3.5" />
@@ -170,7 +165,7 @@ export default function Overview() {
               variant="primary"
               size="sm"
               onClick={() => openDialog({ type: "new-task" })}
-              className="gap-1.5 font-medium text-xs shadow-2xs bg-blue-600 hover:bg-blue-700 text-white"
+              className="gap-1.5 font-medium text-xs shadow-2xs bg-blue-600 hover:bg-blue-700 text-white border-0"
             >
               <Sparkles className="size-3.5" />
               <span>New Ad Task</span>
@@ -193,74 +188,74 @@ export default function Overview() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               
               {/* 1. CTR Card - Explicitly highlighted with blue border in wireframe */}
-              <div className="group relative rounded-2xl bg-white p-5 border-2 border-blue-500 shadow-sm transition-all hover:shadow-md dark:bg-card">
+              <div className="group relative rounded-2xl bg-white p-5 border-2 border-blue-500 shadow-sm transition-all hover:shadow-md">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
                     CTR
                   </span>
-                  <div className="size-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
+                  <div className="size-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                     <MousePointerClick className="size-4" />
                   </div>
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold tracking-tight text-foreground">
+                  <span className="text-3xl font-extrabold tracking-tight text-slate-900">
                     4.82%
                   </span>
                 </div>
-                <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
                   <TrendingUp className="size-3.5" />
                   <span>+1.35% vs Last Month</span>
                 </div>
                 {/* Mini sparkline curve indicator */}
-                <div className="mt-3 h-1.5 w-full bg-blue-100 rounded-full overflow-hidden dark:bg-blue-950">
+                <div className="mt-3 h-1.5 w-full bg-blue-100 rounded-full overflow-hidden">
                   <div className="h-full bg-blue-600 rounded-full w-[78%]" />
                 </div>
               </div>
 
               {/* 2. TOTAL VIEWS Card - Wide in wireframe */}
-              <div className="rounded-2xl bg-white p-5 border border-border/80 shadow-xs transition-all hover:shadow-md dark:bg-card">
+              <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs transition-all hover:shadow-md">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     TOTAL VIEWS
                   </span>
-                  <div className="size-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+                  <div className="size-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
                     <Eye className="size-4" />
                   </div>
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold tracking-tight text-foreground">
+                  <span className="text-3xl font-extrabold tracking-tight text-slate-900">
                     1,842,500
                   </span>
                 </div>
-                <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
                   <TrendingUp className="size-3.5" />
                   <span>+24.8% vs Last Month</span>
                 </div>
-                <div className="mt-3 h-1.5 w-full bg-emerald-100 rounded-full overflow-hidden dark:bg-emerald-950">
+                <div className="mt-3 h-1.5 w-full bg-emerald-100 rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 rounded-full w-[85%]" />
                 </div>
               </div>
 
               {/* 3. CONVERSION RATE Card */}
-              <div className="rounded-2xl bg-white p-5 border border-border/80 shadow-xs transition-all hover:shadow-md dark:bg-card">
+              <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs transition-all hover:shadow-md">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     CONVERSION RATE
                   </span>
-                  <div className="size-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400">
+                  <div className="size-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
                     <TrendingUp className="size-4" />
                   </div>
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold tracking-tight text-foreground">
+                  <span className="text-3xl font-extrabold tracking-tight text-slate-900">
                     3.65%
                   </span>
                 </div>
-                <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
                   <TrendingUp className="size-3.5" />
                   <span>+0.85% vs Target</span>
                 </div>
-                <div className="mt-3 h-1.5 w-full bg-indigo-100 rounded-full overflow-hidden dark:bg-indigo-950">
+                <div className="mt-3 h-1.5 w-full bg-indigo-100 rounded-full overflow-hidden">
                   <div className="h-full bg-indigo-600 rounded-full w-[65%]" />
                 </div>
               </div>
@@ -270,81 +265,81 @@ export default function Overview() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               
               {/* 4. MONEY SPENT IN 30 DAYS Card */}
-              <div className="rounded-2xl bg-white p-5 border border-border/80 shadow-xs transition-all hover:shadow-md dark:bg-card">
+              <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs transition-all hover:shadow-md">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       MONEY SPENT IN 30 DAYS
                     </span>
-                    <p className="text-[11px] text-muted-foreground/80 mt-0.5">
+                    <p className="text-[11px] text-slate-400 mt-0.5">
                       Pacing at 59.3% of $25,000 cap
                     </p>
                   </div>
-                  <div className="size-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 dark:bg-amber-950/60 dark:text-amber-400">
+                  <div className="size-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
                     <DollarSign className="size-4" />
                   </div>
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold tracking-tight text-foreground">
+                  <span className="text-3xl font-extrabold tracking-tight text-slate-900">
                     $14,820
                   </span>
-                  <span className="text-xs font-medium text-muted-foreground">
+                  <span className="text-xs font-medium text-slate-500">
                     / $25,000 cap
                   </span>
                 </div>
                 <div className="mt-3">
-                  <div className="flex justify-between text-[11px] font-semibold text-muted-foreground mb-1">
+                  <div className="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
                     <span>Spent: $14,820</span>
                     <span>59.3%</span>
                   </div>
-                  <div className="h-2 w-full bg-amber-100 rounded-full overflow-hidden dark:bg-amber-950">
+                  <div className="h-2 w-full bg-amber-100 rounded-full overflow-hidden">
                     <div className="h-full bg-amber-500 rounded-full w-[59.3%]" />
                   </div>
                 </div>
               </div>
 
               {/* 5. BUDGET REMAINING Card */}
-              <div className="rounded-2xl bg-white p-5 border border-border/80 shadow-xs transition-all hover:shadow-md dark:bg-card">
+              <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs transition-all hover:shadow-md">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       BUDGET REMAINING
                     </span>
-                    <p className="text-[11px] text-muted-foreground/80 mt-0.5">
+                    <p className="text-[11px] text-slate-400 mt-0.5">
                       Safe allowance for remaining period
                     </p>
                   </div>
-                  <div className="size-8 rounded-lg bg-teal-50 flex items-center justify-center text-teal-600 dark:bg-teal-950/60 dark:text-teal-400">
+                  <div className="size-8 rounded-lg bg-teal-50 flex items-center justify-center text-teal-600">
                     <Wallet className="size-4" />
                   </div>
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold tracking-tight text-foreground">
+                  <span className="text-3xl font-extrabold tracking-tight text-slate-900">
                     $10,180
                   </span>
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 border border-teal-200 dark:bg-teal-950/60 dark:text-teal-400 dark:border-teal-800">
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 border border-teal-200">
                     $339 / day
                   </span>
                 </div>
-                <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground">
+                <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500">
                   <span className="flex items-center gap-1 text-emerald-600 font-medium">
                     <CheckCircle2 className="size-3.5" />
                     ArmorIQ Sandbox Limit Enforced
                   </span>
-                  <span className="font-semibold text-foreground">12 Days Left</span>
+                  <span className="font-semibold text-slate-700">12 Days Left</span>
                 </div>
               </div>
             </div>
 
             {/* OVERVIEW BAR CHART (Image 2 Reference Design) */}
-            <div className="rounded-2xl bg-white p-6 border border-border/80 shadow-xs dark:bg-card">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border">
+            <div className="rounded-2xl bg-white p-6 border border-slate-200/90 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
                 <div>
-                  <h2 className="text-lg font-bold text-foreground tracking-tight">Overview</h2>
+                  <h2 className="text-lg font-bold text-slate-900 tracking-tight">Overview</h2>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-muted-foreground font-medium">Avg Per month</span>
-                    <span className="text-base font-extrabold text-foreground tracking-tight">1,860/3K</span>
-                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                    <span className="text-xs text-slate-500 font-medium">Avg Per month</span>
+                    <span className="text-base font-extrabold text-slate-900 tracking-tight">1,860/3K</span>
+                    <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                       56.2% ↗
                     </span>
                   </div>
@@ -354,13 +349,13 @@ export default function Overview() {
                   <select
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(e.target.value)}
-                    className="cursor-pointer appearance-none rounded-lg border border-border bg-background px-3 py-1.5 pr-8 text-xs font-semibold text-foreground shadow-2xs hover:bg-muted/50 focus:outline-none"
+                    className="cursor-pointer appearance-none rounded-lg border border-slate-200 bg-white px-3 py-1.5 pr-8 text-xs font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 focus:outline-none"
                   >
                     <option value="Last Month">Last Month</option>
                     <option value="Last 3 Months">Last 3 Months</option>
                     <option value="Year to Date">Year to Date</option>
                   </select>
-                  <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-3 text-muted-foreground" />
+                  <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-3 text-slate-400" />
                 </div>
               </div>
 
@@ -378,15 +373,15 @@ export default function Overview() {
                       {/* Active Tooltip Popover matching Image 2 "August 2026 120 pcs" */}
                       {isHovered && (
                         <div className="absolute -top-10 z-20 flex flex-col items-center">
-                          <div className="rounded-lg bg-slate-900 px-2.5 py-1 text-center shadow-lg dark:bg-slate-100">
-                            <span className="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                          <div className="rounded-lg bg-slate-900 px-2.5 py-1 text-center shadow-lg">
+                            <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                               {bar.month} 2026
                             </span>
-                            <span className="block text-xs font-bold text-white dark:text-slate-900">
+                            <span className="block text-xs font-bold text-white">
                               {bar.label}
                             </span>
                           </div>
-                          <div className="h-1.5 w-1.5 rotate-45 bg-slate-900 -mt-1 dark:bg-slate-100" />
+                          <div className="h-1.5 w-1.5 rotate-45 bg-slate-900 -mt-1" />
                         </div>
                       )}
 
@@ -396,18 +391,18 @@ export default function Overview() {
                           style={{ height: `${heightPercent}%` }}
                           className={`w-full rounded-t-xl transition-all duration-300 ${
                             isHovered
-                              ? "bg-slate-800 shadow-md ring-2 ring-slate-800/20 dark:bg-slate-200"
-                              : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700"
+                              ? "bg-slate-800 shadow-md ring-2 ring-slate-800/20"
+                              : "bg-slate-100 hover:bg-slate-200"
                           }`}
                         >
-                          {/* Diagonal pattern stripes for aesthetic match with wireframe */}
+                          {/* Diagonal pattern stripes matching wireframe */}
                           <div className="h-full w-full rounded-t-xl opacity-20 bg-[repeating-linear-gradient(45deg,#000,#000_2px,transparent_2px,transparent_6px)]" />
                         </div>
                       </div>
 
                       {/* Month label */}
                       <span className={`mt-2 text-xs font-semibold transition-colors ${
-                        isHovered ? "text-foreground font-bold" : "text-muted-foreground"
+                        isHovered ? "text-slate-900 font-bold" : "text-slate-500"
                       }`}>
                         {bar.month}
                       </span>
@@ -418,16 +413,16 @@ export default function Overview() {
             </div>
 
             {/* UPCOMING DELIVERIES TABLE (Image 2 Reference Design) */}
-            <div className="rounded-2xl bg-white p-6 border border-border/80 shadow-xs dark:bg-card">
-              <div className="flex items-center justify-between pb-4 border-b border-border">
+            <div className="rounded-2xl bg-white p-6 border border-slate-200/90 shadow-xs">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                 <div>
-                  <h2 className="text-base font-bold text-foreground">Upcoming Deliveries & Scheduled Ads</h2>
-                  <p className="text-xs text-muted-foreground">Governed ad releases awaiting schedule timestamp</p>
+                  <h2 className="text-base font-bold text-slate-900">Upcoming Deliveries & Scheduled Ads</h2>
+                  <p className="text-xs text-slate-500">Governed ad releases awaiting schedule timestamp</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => toast("Applied delivery status filter")}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-background text-xs font-semibold text-foreground hover:bg-muted/50 shadow-2xs transition"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs transition"
                 >
                   <Filter className="size-3" />
                   <span>Filter</span>
@@ -437,7 +432,7 @@ export default function Overview() {
               <div className="mt-3 overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-border text-muted-foreground font-semibold">
+                    <tr className="border-b border-slate-200 text-slate-500 font-semibold">
                       <th className="py-2.5 px-3 w-8">#</th>
                       <th className="py-2.5 px-3">ID Order</th>
                       <th className="py-2.5 px-3">Item / Ad Creative</th>
@@ -446,29 +441,29 @@ export default function Overview() {
                       <th className="py-2.5 px-3">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/60">
+                  <tbody className="divide-y divide-slate-100">
                     {UPCOMING_DELIVERIES.map((delivery) => {
                       const isChecked = Boolean(checkedOrders[delivery.id]);
                       return (
-                        <tr key={delivery.id} className="hover:bg-muted/40 transition">
+                        <tr key={delivery.id} className="hover:bg-slate-50/70 transition">
                           <td className="py-3 px-3">
                             <input
                               type="checkbox"
                               checked={isChecked}
                               onChange={() => toggleCheck(delivery.id)}
-                              className="size-4 rounded border-border text-blue-600 focus:ring-blue-500 cursor-pointer"
+                              className="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                             />
                           </td>
-                          <td className="py-3 px-3 font-mono font-bold text-foreground">
+                          <td className="py-3 px-3 font-mono font-bold text-slate-900">
                             {delivery.id}
                           </td>
-                          <td className="py-3 px-3 font-semibold text-foreground">
+                          <td className="py-3 px-3 font-semibold text-slate-900">
                             {delivery.item}
                           </td>
-                          <td className="py-3 px-3 text-muted-foreground font-medium">
+                          <td className="py-3 px-3 text-slate-500 font-medium">
                             {delivery.qty}
                           </td>
-                          <td className="py-3 px-3 text-muted-foreground">
+                          <td className="py-3 px-3 text-slate-500">
                             {delivery.date}
                           </td>
                           <td className="py-3 px-3">
@@ -491,16 +486,16 @@ export default function Overview() {
             Dedicated vertical card container with post entries
           */}
           <div className="lg:col-span-4 flex flex-col gap-4">
-            <div className="rounded-2xl bg-white p-5 border border-border/80 shadow-xs dark:bg-card">
-              <div className="flex items-center justify-between pb-3.5 border-b border-border">
+            <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs">
+              <div className="flex items-center justify-between pb-3.5 border-b border-slate-200">
                 <div>
-                  <h2 className="text-base font-bold text-foreground uppercase tracking-tight flex items-center gap-1.5">
+                  <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5">
                     <span>RECENT POST</span>
-                    <span className="text-xs font-normal text-muted-foreground font-mono">
+                    <span className="text-xs font-normal text-slate-400 font-mono">
                       ({RECENT_POSTS.length})
                     </span>
                   </h2>
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-[11px] text-slate-500">
                     Multi-platform ad delivery status
                   </p>
                 </div>
@@ -522,10 +517,10 @@ export default function Overview() {
                 {RECENT_POSTS.map((post) => (
                   <div
                     key={post.id}
-                    className="group relative flex flex-col gap-2 rounded-xl border border-border/80 bg-slate-50/50 p-3.5 transition-all hover:border-blue-300 hover:bg-blue-50/20 hover:shadow-2xs dark:bg-card dark:hover:bg-muted/30"
+                    className="group relative flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-all hover:border-blue-300 hover:bg-blue-50/20 hover:shadow-2xs"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
                         {post.platform}
                       </span>
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${post.statusColor}`}>
@@ -533,18 +528,18 @@ export default function Overview() {
                       </span>
                     </div>
 
-                    <h3 className="text-xs font-bold text-foreground leading-snug line-clamp-2">
+                    <h3 className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">
                       {post.title}
                     </h3>
 
-                    <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground pt-2 border-t border-border/60">
-                      <span className="font-semibold text-foreground">
+                    <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-200/70">
+                      <span className="font-semibold text-slate-700">
                         {post.views} views
                       </span>
                       <span className="font-bold text-blue-600">
                         CTR: {post.ctr}
                       </span>
-                      <span className="text-[10px] text-muted-foreground">
+                      <span className="text-[10px] text-slate-400">
                         {post.date}
                       </span>
                     </div>
@@ -552,12 +547,12 @@ export default function Overview() {
                 ))}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-border">
+              <div className="mt-4 pt-3 border-t border-slate-200">
                 <Button
                   variant="secondary"
                   size="sm"
                   onClick={() => toast("Syncing live Meta Ads API data...")}
-                  className="w-full justify-center text-xs font-semibold gap-1.5"
+                  className="w-full justify-center text-xs font-semibold gap-1.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs"
                 >
                   <ExternalLink className="size-3" />
                   <span>Sync Meta Graph API</span>
@@ -566,14 +561,14 @@ export default function Overview() {
             </div>
 
             {/* Quick ArmorIQ Sandbox Security Card */}
-            <div className="rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-50/60 to-cyan-50/40 p-4 dark:border-blue-900/50 dark:from-blue-950/30 dark:to-cyan-950/20">
+            <div className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50/80 to-cyan-50/60 p-4 shadow-2xs">
               <div className="flex items-start gap-3">
                 <div className="size-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                   <CheckCircle2 className="size-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-foreground">Zero-Trust Sandbox Protected</h4>
-                  <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
+                  <h4 className="text-xs font-bold text-slate-900">Zero-Trust Sandbox Protected</h4>
+                  <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
                     All scheduled ad actions are tokenized via ArmorIQ Merkle proofs before Meta API dispatch. No budget overruns or unauthorized publishes permitted.
                   </p>
                 </div>

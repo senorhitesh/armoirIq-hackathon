@@ -204,21 +204,21 @@ export default function CreativeSpaceView() {
   const spearman = backtestReport?.spearmanCorrelation || 0.84;
 
   return (
-    <div className="scroll-thin min-h-0 flex-1 overflow-y-auto p-4 md:p-6 bg-slate-950 text-slate-100">
+    <div className="scroll-thin min-h-0 flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50/60 text-slate-900">
       <div className="mx-auto max-w-7xl flex flex-col gap-6">
         {/* Header Controls for Creative Space */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                <Sparkles className="size-5 text-cyan-400" />
+              <span className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                <Sparkles className="size-5 text-blue-600" />
                 Creative Space & Multi-Agent Studio
               </span>
-              <span className="rounded-full bg-cyan-950/80 px-2.5 py-0.5 text-xs font-semibold text-cyan-300 border border-cyan-800/80">
+              <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 border border-blue-200">
                 ArmorIQ Cryptographic Spine
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Autonomous ad drafting, virality prediction, and Zero-Trust cryptographic policy gating.
             </p>
           </div>
@@ -227,21 +227,21 @@ export default function CreativeSpaceView() {
             <button
               onClick={() => setVoiceEnabled(!voiceEnabled)}
               title={voiceEnabled ? "Mute ElevenLabs Voice" : "Enable ElevenLabs Voice"}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-50 shadow-2xs transition"
             >
-              {voiceEnabled ? <Volume2 className="size-3.5 text-cyan-400" /> : <VolumeX className="size-3.5 text-slate-500" />}
+              {voiceEnabled ? <Volume2 className="size-3.5 text-blue-600" /> : <VolumeX className="size-3.5 text-slate-400" />}
               <span>{voiceEnabled ? "Voice Feedback ON" : "Muted"}</span>
             </button>
             <button
               onClick={() => setIsOnboardingOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-cyan-800/80 bg-cyan-950/60 text-xs text-cyan-300 hover:bg-cyan-900/60 transition"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-200 bg-blue-50 text-xs font-semibold text-blue-700 hover:bg-blue-100/70 shadow-2xs transition"
             >
-              <ShieldCheck className="size-3.5" />
+              <ShieldCheck className="size-3.5 text-blue-600" />
               <span>Verify Spine</span>
             </button>
             <button
               onClick={handleResetDemo}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 text-xs text-slate-400 hover:text-slate-200 transition"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 shadow-2xs transition"
             >
               <RotateCcw className="size-3.5" />
               <span>Reset</span>
@@ -259,13 +259,13 @@ export default function CreativeSpaceView() {
         />
 
         {/* Section Navigation Tabs */}
-        <div className="flex items-center gap-2 p-1 bg-slate-900 rounded-xl border border-slate-800 self-start text-xs font-medium">
+        <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-xl border border-slate-200 self-start text-xs font-medium">
           <button
             onClick={() => setActiveSection('workspace')}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
               activeSection === 'workspace'
-                ? 'bg-cyan-600 text-white font-semibold shadow-xs'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-600 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Layers className="size-3.5" />
@@ -275,8 +275,8 @@ export default function CreativeSpaceView() {
             onClick={() => setActiveSection('radar')}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
               activeSection === 'radar'
-                ? 'bg-cyan-600 text-white font-semibold shadow-xs'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-600 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Radar className="size-3.5" />
@@ -286,8 +286,8 @@ export default function CreativeSpaceView() {
             onClick={() => setActiveSection('governance')}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
               activeSection === 'governance'
-                ? 'bg-cyan-600 text-white font-semibold shadow-xs'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-600 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Lock className="size-3.5" />
