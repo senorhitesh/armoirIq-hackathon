@@ -476,7 +476,7 @@ export default function Board({ mine = false }: { mine?: boolean }) {
           </div>
         )}
         {panelOpen && (
-          <div className="border-border hidden shrink-0 border-l lg:flex">
+          <div className="border-slate-200 hidden shrink-0 border-l lg:flex">
             {panel}
           </div>
         )}

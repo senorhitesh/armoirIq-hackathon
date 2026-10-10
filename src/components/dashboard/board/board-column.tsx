@@ -136,7 +136,7 @@ export default function BoardColumn({
       ref={setColumnRef}
       data-column-id={column.id}
       aria-label={column.name}
-      className="scroll-thin border-border flex h-full w-[85vw] max-w-[340px] shrink-0 snap-start flex-col overflow-y-auto overscroll-y-contain border-r border-b sm:w-[320px] lg:w-auto lg:max-w-none lg:min-w-[345px] lg:flex-1"
+      className="scroll-thin border-slate-200 flex h-full w-[85vw] max-w-[340px] shrink-0 snap-start flex-col overflow-y-auto overscroll-y-contain border-r border-b sm:w-[320px] lg:w-auto lg:max-w-none lg:min-w-[345px] lg:flex-1"
     >
       <header className="sticky top-0 z-10 flex items-center justify-between gap-2 bg-[linear-gradient(to_bottom,var(--background)_calc(100%-20px),transparent)] px-4 pt-4 pb-5">
         <div className="flex min-w-0 flex-1 items-center gap-2">
@@ -227,7 +227,7 @@ export default function BoardColumn({
         )}
         {nodes}
         {tasks.length === 0 && !composing && slotIndex < 0 && (
-          <div className="border-border bg-secondary flex h-[130px] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed">
+          <div className="border-slate-200 bg-secondary flex h-[130px] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed">
             <span className="text-subtle">No issues here yet</span>
             <Button
               variant="ghost"

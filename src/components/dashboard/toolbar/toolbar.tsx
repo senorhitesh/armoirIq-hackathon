@@ -20,7 +20,7 @@ export default function Toolbar() {
   const panelActive = belowLg ? panelSheetOpen : panelOpen;
 
   return (
-    <div className="border-border flex flex-wrap items-center gap-2 border-b p-4">
+    <div className="border-slate-200 flex flex-wrap items-center gap-2 border-b p-4">
       <div className="flex w-full items-center gap-2 sm:w-auto">
         <ToolbarTabs />
         <Button

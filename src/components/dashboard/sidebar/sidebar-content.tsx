@@ -68,12 +68,12 @@ export default function SidebarContent({
       {/* Brand Header */}
       <div
         className={cn(
-          "border-border ease-smooth-in-out relative shrink-0 border-b transition-[height] duration-200",
+          "border-slate-200 ease-smooth-in-out relative shrink-0 border-b transition-[height] duration-200",
           collapsed ? "h-[100px]" : "h-[64px]",
         )}
       >
         <div className="flex items-center gap-2.5 absolute top-3.5 left-3.5">
-          <div className="size-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold shadow-xs">
+          <div className="size-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 font-bold shadow-xs">
             <Logo className="size-4 text-blue-600" />
           </div>
           <div
@@ -115,7 +115,7 @@ export default function SidebarContent({
       {/* Main Wireframe Navigation Section */}
       <nav
         aria-label="Core Navigation"
-        className="border-border flex flex-col gap-1.5 border-b p-3"
+        className="border-slate-200 flex flex-col gap-1.5 border-b p-3"
       >
         <SidebarLabel collapsed={collapsed}>Main Apps</SidebarLabel>
 
@@ -127,7 +127,8 @@ export default function SidebarContent({
           active={nav === "workspace"}
           className={cn(
             "font-medium rounded-lg transition-all",
-            nav === "workspace" && "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs"
+            nav === "workspace" &&
+              "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs",
           )}
           onClick={() => {
             setNav("workspace");
@@ -143,7 +144,8 @@ export default function SidebarContent({
           active={nav === "analytics"}
           className={cn(
             "font-medium rounded-lg transition-all",
-            nav === "analytics" && "bg-blue-50/90 text-blue-700 border border-blue-300 shadow-xs"
+            nav === "analytics" &&
+              "bg-blue-50/90 text-blue-700 border border-blue-300 shadow-xs",
           )}
           onClick={() => {
             setNav("analytics");
@@ -159,7 +161,8 @@ export default function SidebarContent({
           active={nav === "creative-space"}
           className={cn(
             "font-medium rounded-lg transition-all",
-            nav === "creative-space" && "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs"
+            nav === "creative-space" &&
+              "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs",
           )}
           onClick={() => {
             setNav("creative-space");
@@ -170,7 +173,7 @@ export default function SidebarContent({
       {/* Campaign Views / Teams */}
       <nav
         aria-label="Workspace"
-        className="border-border flex flex-col gap-4 border-b p-3"
+        className="border-slate-200 flex flex-col gap-4 border-b p-3"
       >
         <div className="flex flex-col gap-1">
           <SidebarLabel collapsed={collapsed}>Pipeline & Queues</SidebarLabel>
@@ -210,34 +213,6 @@ export default function SidebarContent({
           label="Invite Team"
           collapsed={collapsed}
           onClick={() => openDialog({ type: "invite" })}
-        />
-        <SidebarItem
-          icon={LinkIcon}
-          label={githubConnected ? "ArmorIQ Synced" : "Connect ArmorIQ Key"}
-          collapsed={collapsed}
-          onClick={() => {
-            toggleGithub();
-            toast(githubConnected ? "ArmorIQ sync disabled" : "ArmorIQ cryptographic sync enabled");
-          }}
-          trailing={
-            githubConnected ? (
-              <span
-                aria-hidden
-                className="bg-emerald-500 size-2 shrink-0 rounded-full ring-2 ring-emerald-500/20"
-              />
-            ) : undefined
-          }
-        />
-      </div>
-
-      {/* Footer / Info */}
-      <div className="flex flex-col p-3 border-t border-border">
-        <SidebarItem
-          icon={HelpIcon}
-          label="ArmorIQ Docs & Help"
-          collapsed={collapsed}
-          className="gap-2"
-          onClick={() => openDialog({ type: "help" })}
         />
       </div>
     </div>

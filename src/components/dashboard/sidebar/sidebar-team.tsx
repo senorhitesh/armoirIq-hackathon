@@ -59,12 +59,12 @@ export default function SidebarTeam({ collapsed }: { collapsed: boolean }) {
               <div key={child.id} className="relative">
                 <span
                   aria-hidden
-                  className="border-border pointer-events-none absolute -top-1 -left-[7px] h-[calc(50%+4px)] w-2 rounded-bl-md border-b border-l"
+                  className="border-slate-300 pointer-events-none absolute -top-1 -left-[7px] h-[calc(50%+4px)] w-2 rounded-bl-md border-b border-l"
                 />
                 {index < children.length - 1 && (
                   <span
                     aria-hidden
-                    className="border-border pointer-events-none absolute top-1/2 -bottom-1 -left-[7px] border-l"
+                    className="border-slate-300 pointer-events-none absolute top-1/2 -bottom-1 -left-[7px] border-l"
                   />
                 )}
                 <SidebarItem

@@ -7,7 +7,7 @@ export default function BoardSkeleton() {
       {[0, 1, 2].map((column) => (
         <div
           key={column}
-          className="border-border flex w-[85vw] max-w-[340px] shrink-0 flex-col gap-5 border-r p-4 sm:w-[320px] lg:w-auto lg:max-w-none lg:flex-1"
+          className="border-slate-200 flex w-[85vw] max-w-[340px] shrink-0 flex-col gap-5 border-r p-4 sm:w-[320px] lg:w-auto lg:max-w-none lg:flex-1"
         >
           <div className="flex items-center gap-2">
             <span className="bg-muted size-3.5 rounded-[4px]" />

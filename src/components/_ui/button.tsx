@@ -9,12 +9,12 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "rounded-[10px] bg-primary text-primary-foreground shadow-[0_0_0_1px_var(--primary)] hover:bg-[#2b2b2b] hover:shadow-[0_0_0_1px_#2b2b2b]",
+          "rounded-[10px] bg-blue-600 text-white shadow-xs hover:bg-blue-700",
         secondary:
           "rounded-[10px] bg-white text-muted-foreground shadow-control hover:bg-secondary hover:text-foreground data-[active=true]:bg-secondary data-[active=true]:text-foreground",
         ghost:
           "rounded-lg text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground data-[active=true]:bg-foreground/[0.05] data-[active=true]:text-foreground",
-        chip: "rounded-full bg-white text-muted-foreground shadow-ring hover:text-foreground hover:shadow-[0_0_0_1px_#d6d6d6] data-[active=true]:text-foreground data-[active=true]:shadow-[0_0_0_1px_var(--foreground)]",
+        chip: "rounded-full bg-white text-muted-foreground shadow-ring hover:text-foreground hover:shadow-[0_0_0_1px_#cbd5e1] data-[active=true]:text-blue-700 data-[active=true]:bg-blue-50 data-[active=true]:shadow-[0_0_0_1px_#93c5fd]",
         danger:
           "rounded-lg text-danger hover:bg-danger/[0.06] data-[active=true]:bg-danger data-[active=true]:text-white",
       },

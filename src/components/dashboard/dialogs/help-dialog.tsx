@@ -25,7 +25,7 @@ export default function HelpDialog({ open }: { open: boolean }) {
       <div className="flex flex-col gap-5">
         <section className="flex flex-col gap-3">
           <h3>Keyboard shortcuts</h3>
-          <div className="divide-border flex flex-col divide-y">
+          <div className="divide-slate-200 flex flex-col divide-y">
             {shortcuts.map((shortcut) => (
               <div
                 key={shortcut.label}

@@ -135,7 +135,7 @@ export default function Sheet({
               {children}
             </div>
             {footer && (
-              <div className="border-border flex items-center gap-2 border-t p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+              <div className="border-slate-200 flex items-center gap-2 border-t p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
                 {footer}
               </div>
             )}

@@ -103,7 +103,7 @@ export default function Dialog({
               className,
             )}
           >
-            <div className="border-border flex items-start gap-3 border-b p-4">
+            <div className="border-slate-200 flex items-start gap-3 border-b p-4">
               <div className="min-w-0 flex-1">
                 <h2 id={titleId} className="lead-style">
                   {title}
@@ -126,7 +126,7 @@ export default function Dialog({
               {children}
             </div>
             {footer && (
-              <div className="border-border flex flex-wrap items-center justify-end gap-2 border-t p-4">
+              <div className="border-slate-200 flex flex-wrap items-center justify-end gap-2 border-t p-4">
                 {footer}
               </div>
             )}

@@ -21,7 +21,7 @@ export default function Toaster() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.98 }}
             transition={{ duration: 0.2, ease: ease.power3Out }}
-            className="bg-slate-900 text-white shadow-xl pointer-events-auto rounded-xl px-4 py-2.5 text-xs font-semibold tracking-tight border border-slate-800"
+            className="bg-white text-slate-900 shadow-xl pointer-events-auto rounded-xl px-4 py-2.5 text-xs font-semibold tracking-tight border border-slate-200"
           >
             {toastMessage}
           </motion.div>

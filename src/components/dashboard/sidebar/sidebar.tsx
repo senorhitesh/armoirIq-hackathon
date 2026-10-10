@@ -16,7 +16,7 @@ export default function Sidebar() {
     <>
       <aside
         className={cn(
-          "border-border bg-sidebar ease-smooth-in-out hidden h-full shrink-0 flex-col overflow-hidden border-r transition-[width] duration-200 lg:flex",
+          "border-slate-200 bg-sidebar ease-smooth-in-out hidden h-full shrink-0 flex-col overflow-hidden border-r transition-[width] duration-200 lg:flex",
           collapsed ? "w-[60px]" : "w-[260px]",
         )}
       >

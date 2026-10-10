@@ -49,7 +49,7 @@ export default function Inbox() {
           {attention.length === 0 ? (
             <p className="text-subtle">You&apos;re all caught up.</p>
           ) : (
-            <div className="divide-border flex flex-col divide-y">
+            <div className="divide-slate-200 flex flex-col divide-y">
               {attention.map((task) => {
                 const column = columns.find((c) => c.id === task.columnId);
                 const meta = COLUMN_META[column?.kind ?? "todo"];

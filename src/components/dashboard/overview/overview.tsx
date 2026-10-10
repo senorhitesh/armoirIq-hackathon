@@ -373,15 +373,15 @@ export default function Overview() {
                       {/* Active Tooltip Popover matching Image 2 "August 2026 120 pcs" */}
                       {isHovered && (
                         <div className="absolute -top-10 z-20 flex flex-col items-center">
-                          <div className="rounded-lg bg-slate-900 px-2.5 py-1 text-center shadow-lg">
-                            <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                          <div className="rounded-lg bg-blue-600 px-2.5 py-1 text-center shadow-lg shadow-blue-600/20">
+                            <span className="block text-[10px] font-semibold text-blue-100 uppercase tracking-wider">
                               {bar.month} 2026
                             </span>
                             <span className="block text-xs font-bold text-white">
                               {bar.label}
                             </span>
                           </div>
-                          <div className="h-1.5 w-1.5 rotate-45 bg-slate-900 -mt-1" />
+                          <div className="h-1.5 w-1.5 rotate-45 bg-blue-600 -mt-1" />
                         </div>
                       )}
 
@@ -391,12 +391,16 @@ export default function Overview() {
                           style={{ height: `${heightPercent}%` }}
                           className={`w-full rounded-t-xl transition-all duration-300 ${
                             isHovered
-                              ? "bg-slate-800 shadow-md ring-2 ring-slate-800/20"
+                              ? "bg-blue-600 shadow-md shadow-blue-500/25 ring-2 ring-blue-500/20"
                               : "bg-slate-100 hover:bg-slate-200"
                           }`}
                         >
                           {/* Diagonal pattern stripes matching wireframe */}
-                          <div className="h-full w-full rounded-t-xl opacity-20 bg-[repeating-linear-gradient(45deg,#000,#000_2px,transparent_2px,transparent_6px)]" />
+                          <div className={`h-full w-full rounded-t-xl opacity-20 ${
+                            isHovered
+                              ? "bg-[repeating-linear-gradient(45deg,#fff,#fff_2px,transparent_2px,transparent_6px)]"
+                              : "bg-[repeating-linear-gradient(45deg,#64748b,#64748b_2px,transparent_2px,transparent_6px)]"
+                          }`} />
                         </div>
                       </div>
 

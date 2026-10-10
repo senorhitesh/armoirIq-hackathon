@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+@theme {
+  --color-border: #e2e8f0;
+  --color-card-border: #eaecf0;
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-sidebar: #f8fafc;
+  --color-sidebar-foreground: #1e293b;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-muted-hover: #e2e8f0;
+  --color-subtle: #94a3b8;
+  --color-icon: #64748b;
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f8fafc;
+  --color-secondary-foreground: #0f172a;
+  --color-info: #2563eb;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+}
+
 @layer base {
   :root {
     --background: #ffffff;
@@ -15,7 +39,7 @@
     --muted-hover: #e2e8f0;
     --subtle: #94a3b8;
     --icon: #64748b;
-    --primary: #0f172a;
+    --primary: #2563eb;
     --primary-foreground: #ffffff;
     --secondary: #f8fafc;
     --secondary-foreground: #0f172a;
@@ -23,6 +47,14 @@
     --success: #10b981;
     --warning: #f59e0b;
     --danger: #ef4444;
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #e2e8f0;
   }
 
   body {

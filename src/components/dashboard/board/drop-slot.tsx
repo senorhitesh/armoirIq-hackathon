@@ -23,7 +23,7 @@ export default function DropSlot(props: DropSlotProps) {
       aria-hidden
       layout="position"
       transition={{ layout: { type: "spring", duration: 0.3, bounce: 0 } }}
-      className="border-border bg-secondary rounded-2xl border border-dashed"
+      className="border-slate-200 bg-secondary rounded-2xl border border-dashed"
     >
       <TaskCardView {...props} invisible />
     </motion.div>

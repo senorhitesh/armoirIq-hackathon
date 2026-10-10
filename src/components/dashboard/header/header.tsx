@@ -68,7 +68,7 @@ export default function Header() {
   };
 
   return (
-    <header className="border-border flex items-center justify-between gap-3 border-b bg-card/60 px-4 py-3 backdrop-blur-sm">
+    <header className="border-slate-200 flex items-center justify-between gap-3 border-b bg-card/60 px-4 py-3 backdrop-blur-sm">
       <div className="flex items-center gap-3 min-w-0">
         <Button
           variant="secondary"
@@ -89,7 +89,7 @@ export default function Header() {
                 setSelectedAccount(e.target.value);
                 toast(`Switched context to ${e.target.value}`);
               }}
-              className="appearance-none cursor-pointer rounded-lg border border-border bg-background px-3 py-1.5 pr-8 text-xs font-semibold text-foreground tracking-tight shadow-xs hover:border-border/80 focus:ring-2 focus:ring-primary/20 focus:outline-none"
+              className="appearance-none cursor-pointer rounded-lg border border-slate-200 bg-background px-3 py-1.5 pr-8 text-xs font-semibold text-foreground tracking-tight shadow-xs hover:border-slate-300 focus:ring-2 focus:ring-primary/20 focus:outline-none"
             >
               <option value="meta-ads-account">meta-ads-account</option>
               <option value="linkedin-b2b-growth">linkedin-b2b-growth</option>
@@ -102,7 +102,7 @@ export default function Header() {
         {/* Breadcrumbs & Title */}
         <nav
           aria-label="Breadcrumb"
-          className="hidden md:flex min-w-0 items-center gap-2 border-l border-border pl-3"
+          className="hidden md:flex min-w-0 items-center gap-2 border-l border-slate-200 pl-3"
         >
           <span className="text-muted-foreground text-xs font-medium">
             ScaleFlow IQ
@@ -127,7 +127,7 @@ export default function Header() {
             </span>
           )}
 
-          <div className="divide-border flex shrink-0 divide-x overflow-hidden rounded-md border border-border bg-background">
+          <div className="divide-slate-200 flex shrink-0 divide-x overflow-hidden rounded-md border border-slate-200 bg-background">
             <Button
               variant="ghost"
               size="icon"
