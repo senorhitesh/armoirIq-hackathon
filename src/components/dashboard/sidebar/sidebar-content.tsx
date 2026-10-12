@@ -3,26 +3,18 @@
 import SidebarItem, {
   sidebarFade,
 } from "@/components/dashboard/sidebar/sidebar-item";
-import SidebarTeam from "@/components/dashboard/sidebar/sidebar-team";
 import Button from "@/components/_ui/button";
-import { useKanbanStore } from "@/stores/kanban-store";
 import { useUiStore } from "@/stores/ui-store";
 import { cn } from "@/lib/utils";
 import {
   Logo,
   AlignLeftIcon,
-  InboxIcon,
   GridIcon,
   CubeIcon,
-  LayersIcon,
-  DotsIcon,
-  ShareIcon,
-  UserPlusIcon,
-  LinkIcon,
-  ArrowLeftIcon,
-  HelpIcon,
+  ChatIcon,
   BarChartIcon,
 } from "@/components/_common/icons";
+import { Flame } from "lucide-react";
 
 type SidebarContentProps = {
   collapsed: boolean;
@@ -58,10 +50,6 @@ export default function SidebarContent({
   const nav = useUiStore((state) => state.nav);
   const setNav = useUiStore((state) => state.setNav);
   const setTab = useUiStore((state) => state.setTab);
-  const openDialog = useUiStore((state) => state.openDialog);
-  const toast = useUiStore((state) => state.toast);
-  const githubConnected = useKanbanStore((state) => state.githubConnected);
-  const toggleGithub = useKanbanStore((state) => state.toggleGithub);
 
   return (
     <div className="flex h-full flex-col bg-sidebar select-none">
@@ -84,10 +72,10 @@ export default function SidebarContent({
             )}
           >
             <span className="font-semibold text-[14px] leading-tight text-foreground tracking-tight">
-              ScaleFlow IQ
+              AdLoop
             </span>
             <span className="text-[11px] text-muted-foreground font-mono">
-              ArmorIQ Governed
+              Marketing Workspace
             </span>
           </div>
         </div>
@@ -112,34 +100,17 @@ export default function SidebarContent({
         </Button>
       </div>
 
-      {/* Main Wireframe Navigation Section */}
+      {/* Core Navigation */}
       <nav
         aria-label="Core Navigation"
         className="border-slate-200 flex flex-col gap-1.5 border-b p-3"
       >
-        <SidebarLabel collapsed={collapsed}>Main Apps</SidebarLabel>
+        <SidebarLabel collapsed={collapsed}>Core</SidebarLabel>
 
-        {/* 1. workspace (Kanban / Campaign Board) */}
-        <SidebarItem
-          icon={GridIcon}
-          label="workspace"
-          collapsed={collapsed}
-          active={nav === "workspace"}
-          className={cn(
-            "font-medium rounded-lg transition-all",
-            nav === "workspace" &&
-              "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs",
-          )}
-          onClick={() => {
-            setNav("workspace");
-            setTab("issues");
-          }}
-        />
-
-        {/* 2. Analytics (Ads Metrics Dashboard - Image 1 active item) */}
+        {/* 1. Dashboard / Analytics */}
         <SidebarItem
           icon={BarChartIcon}
-          label="Analytics"
+          label="Dashboard"
           collapsed={collapsed}
           active={nav === "analytics"}
           className={cn(
@@ -153,10 +124,42 @@ export default function SidebarContent({
           }}
         />
 
-        {/* 3. CREATIVE SPACE (Multi-Agent Creative Studio) */}
+        {/* 2. AI Chat */}
+        <SidebarItem
+          icon={ChatIcon}
+          label="AI Chat"
+          collapsed={collapsed}
+          active={nav === "chat"}
+          className={cn(
+            "font-medium rounded-lg transition-all",
+            nav === "chat" &&
+              "bg-violet-50/80 text-violet-700 border border-violet-200/60 shadow-xs",
+          )}
+          onClick={() => {
+            setNav("chat");
+          }}
+        />
+
+        {/* 3. Trend Jacking */}
+        <SidebarItem
+          icon={Flame}
+          label="Trend Jacking"
+          collapsed={collapsed}
+          active={nav === "trends"}
+          className={cn(
+            "font-medium rounded-lg transition-all",
+            nav === "trends" &&
+              "bg-orange-50/80 text-orange-700 border border-orange-200/60 shadow-xs",
+          )}
+          onClick={() => {
+            setNav("trends");
+          }}
+        />
+
+        {/* 4. Creative Workspace */}
         <SidebarItem
           icon={CubeIcon}
-          label="CREATIVE SPACE"
+          label="Creative Space"
           collapsed={collapsed}
           active={nav === "creative-space"}
           className={cn(
@@ -168,53 +171,27 @@ export default function SidebarContent({
             setNav("creative-space");
           }}
         />
+
+        {/* 5. Kanban Board */}
+        <SidebarItem
+          icon={GridIcon}
+          label="Task Board"
+          collapsed={collapsed}
+          active={nav === "workspace"}
+          className={cn(
+            "font-medium rounded-lg transition-all",
+            nav === "workspace" &&
+              "bg-blue-50/80 text-blue-700 border border-blue-200/60 shadow-xs",
+          )}
+          onClick={() => {
+            setNav("workspace");
+            setTab("issues");
+          }}
+        />
       </nav>
 
-      {/* Campaign Views / Teams */}
-      <nav
-        aria-label="Workspace"
-        className="border-slate-200 flex flex-col gap-4 border-b p-3"
-      >
-        <div className="flex flex-col gap-1">
-          <SidebarLabel collapsed={collapsed}>Pipeline & Queues</SidebarLabel>
-          <SidebarItem
-            icon={InboxIcon}
-            label="Approvals Queue"
-            collapsed={collapsed}
-            active={nav === "inbox"}
-            onClick={() => setNav("inbox")}
-          />
-          <SidebarItem
-            icon={LayersIcon}
-            label="Campaign Views"
-            collapsed={collapsed}
-            active={nav === "views"}
-            onClick={() => setNav("views")}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <SidebarLabel collapsed={collapsed}>Agent Teams</SidebarLabel>
-          <SidebarTeam collapsed={collapsed} />
-        </div>
-      </nav>
-
-      {/* Tools & Integrations */}
-      <div className="scroll-thin flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-3">
-        <SidebarLabel collapsed={collapsed}>Integrations</SidebarLabel>
-        <SidebarItem
-          icon={ShareIcon}
-          label="Export Reports"
-          collapsed={collapsed}
-          onClick={() => toast("Exported ad metrics CSV")}
-        />
-        <SidebarItem
-          icon={UserPlusIcon}
-          label="Invite Team"
-          collapsed={collapsed}
-          onClick={() => openDialog({ type: "invite" })}
-        />
-      </div>
+      {/* Bottom spacer */}
+      <div className="flex-1" />
     </div>
   );
 }

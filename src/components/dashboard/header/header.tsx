@@ -17,7 +17,6 @@ import {
   LinkIcon,
   CopyIcon,
   XCloseIcon,
-  CubeIcon,
 } from "@/components/_common/icons";
 
 export default function Header() {
@@ -34,10 +33,9 @@ export default function Header() {
   const [renaming, setRenaming] = useState(false);
   const [draft, setDraft] = useState(title);
   const [selectedAccount, setSelectedAccount] = useState("meta-ads-account");
-  const [guardActive, setGuardActive] = useState(true);
 
   useEffect(() => {
-    document.title = `${title} - ScaleFlow IQ`;
+    document.title = `${title} - AdLoop`;
   }, [title]);
 
   const startRename = () => {
@@ -67,6 +65,14 @@ export default function Header() {
     }
   };
 
+  const NAV_LABELS: Record<string, string> = {
+    analytics: "Dashboard",
+    chat: "AI Chat",
+    trends: "Trend Jacking",
+    "creative-space": "Creative Workspace",
+    workspace: "Task Board",
+  };
+
   return (
     <header className="border-slate-200 flex items-center justify-between gap-3 border-b bg-card/60 px-4 py-3 backdrop-blur-sm">
       <div className="flex items-center gap-3 min-w-0">
@@ -80,14 +86,14 @@ export default function Header() {
           <AlignLeftIcon className="size-3.5" aria-hidden />
         </Button>
 
-        {/* Wireframe: meta-ads-account Account Selector */}
+        {/* Ad Account Selector */}
         <div className="flex items-center gap-2">
           <div className="relative">
             <select
               value={selectedAccount}
               onChange={(e) => {
                 setSelectedAccount(e.target.value);
-                toast(`Switched context to ${e.target.value}`);
+                toast(`Switched to ${e.target.value}`);
               }}
               className="appearance-none cursor-pointer rounded-lg border border-slate-200 bg-background px-3 py-1.5 pr-8 text-xs font-semibold text-foreground tracking-tight shadow-xs hover:border-slate-300 focus:ring-2 focus:ring-primary/20 focus:outline-none"
             >
@@ -99,13 +105,13 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Breadcrumbs & Title */}
+        {/* Breadcrumbs */}
         <nav
           aria-label="Breadcrumb"
           className="hidden md:flex min-w-0 items-center gap-2 border-l border-slate-200 pl-3"
         >
           <span className="text-muted-foreground text-xs font-medium">
-            ScaleFlow IQ
+            AdLoop
           </span>
           <ChevronRightIcon
             aria-hidden
@@ -123,7 +129,7 @@ export default function Header() {
             />
           ) : (
             <span className="text-xs font-semibold text-foreground truncate max-w-[200px]">
-              {nav === "analytics" ? "Meta Ads Analytics" : title}
+              {NAV_LABELS[nav] || title}
             </span>
           )}
 
@@ -201,31 +207,8 @@ export default function Header() {
         </nav>
       </div>
 
-      {/* Right Controls: Wireframe "No" / Guard toggle & Notifications */}
+      {/* Right Controls */}
       <div className="flex shrink-0 items-center gap-2.5">
-        <button
-          type="button"
-          onClick={() => {
-            setGuardActive(!guardActive);
-            toast(guardActive ? "ArmorIQ Guard in permissive mode" : "ArmorIQ Zero-Trust Guard: ENFORCED");
-          }}
-          title="ArmorIQ Cryptographic Verification Guard"
-          className={cn(
-            "flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold transition-all shadow-2xs",
-            guardActive
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-slate-200 bg-slate-100/70 text-slate-600 hover:bg-slate-100"
-          )}
-        >
-          <span
-            className={cn(
-              "size-1.5 rounded-full",
-              guardActive ? "bg-emerald-500 animate-pulse" : "bg-neutral-400"
-            )}
-          />
-          <span>{guardActive ? "Zero-Trust Active" : "No Guard"}</span>
-        </button>
-
         <Button
           variant="secondary"
           size="icon"

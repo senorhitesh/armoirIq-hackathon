@@ -97,9 +97,9 @@ const DEFAULT_TASKS: Task[] = [
 ];
 
 const DEFAULT_ACTIVITY: Activity[] = [
-  { id: "act-1", user: "Alex (Strategist)", text: "Created campaign brief for Q4 launch", at: new Date(Date.now() - 3600000 * 2).toISOString(), taskId: "task-101" },
-  { id: "act-2", user: "Sarah (Creator)", text: "Submitted Meta 3-Second Hook for review", at: new Date(Date.now() - 3600000 * 5).toISOString(), taskId: "task-102" },
-  { id: "act-3", user: "ArmorIQ Engine", text: "Cryptographic policy verified: Budget threshold within sandbox bounds", at: new Date(Date.now() - 3600000 * 12).toISOString() },
+  { id: "act-1", user: "Alex (Strategist)", text: "Created campaign brief for Q4 launch", at: "2026-10-11T14:00:00.000Z", taskId: "task-101" },
+  { id: "act-2", user: "Sarah (Creator)", text: "Submitted Meta 3-Second Hook for review", at: "2026-10-11T11:00:00.000Z", taskId: "task-102" },
+  { id: "act-3", user: "ArmorIQ Engine", text: "Cryptographic policy verified: Budget threshold within sandbox bounds", at: "2026-10-11T04:00:00.000Z" },
 ];
 
 export const useKanbanStore = create<KanbanState>()(

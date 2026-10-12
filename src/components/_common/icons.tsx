@@ -30,7 +30,8 @@ import {
   HelpCircle as HelpIcon,
   Bell as BellIcon,
   FileText as FileIcon,
-  Star as StarIcon
+  Star as StarIcon,
+  MessageSquare as ChatIcon
 } from "lucide-react";
 
 export {
@@ -65,5 +66,6 @@ export {
   HelpIcon,
   BellIcon,
   FileIcon,
-  StarIcon
+  StarIcon,
+  ChatIcon
 };

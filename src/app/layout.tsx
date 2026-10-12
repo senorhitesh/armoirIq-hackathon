@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ScaleFlow IQ | Governed Multi-Agent Ad Workspace (ArmorIQ)',
-  description: 'Collaborative AI ad workspace where agency teams plan, draft, score, schedule, and iterate with AI agents, with cryptographic intent verification and policy enforcement by ArmorIQ.',
+  title: 'AdLoop | AI-Powered Digital Marketing Workspace',
+  description: 'Manage ad campaigns, iterate content with AI, jack viral trends, and orchestrate your marketing workflow — all in one workspace.',
 };
 
 export default function RootLayout({

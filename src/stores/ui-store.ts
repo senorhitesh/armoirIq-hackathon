@@ -3,18 +3,12 @@ import type { Priority } from "@/lib/kanban";
 
 export type Tab = "overview" | "updates" | "issues";
 
-export type NavId = 
-  | "workspace" 
-  | "analytics" 
-  | "creative-space" 
-  | "inbox" 
-  | "my-issues" 
-  | "projects" 
-  | "views" 
-  | "more"
-  | "team-issues"
-  | "team-projects"
-  | "team-views";
+export type NavId =
+  | "analytics"
+  | "chat"
+  | "trends"
+  | "creative-space"
+  | "workspace";
 
 export type Display = {
   priority: boolean;
@@ -89,14 +83,16 @@ export const useUiStore = create<UiState>((set) => ({
   sidebarOpen: false,
   setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
   sidebarCollapsed: false,
-  toggleSidebarCollapsed: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+  toggleSidebarCollapsed: () =>
+    set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
   dialog: null,
   dialogSession: null,
   setDialogSession: (dialogSession) => set({ dialogSession }),
   openDialog: (dialog) => set({ dialog }),
   closeDialog: () => set({ dialog: null }),
   filter: {},
-  setFilter: (patch) => set((state) => ({ filter: { ...state.filter, ...patch } })),
+  setFilter: (patch) =>
+    set((state) => ({ filter: { ...state.filter, ...patch } })),
   clearFilter: () => set({ filter: {} }),
   search: "",
   setSearch: (search) => set({ search }),
@@ -116,9 +112,11 @@ export const useUiStore = create<UiState>((set) => ({
     set((state) => {
       const merged = { ...state.display, ...patch };
       if ("priority" in patch) merged.showPriority = Boolean(patch.priority);
-      if ("showPriority" in patch) merged.priority = Boolean(patch.showPriority);
+      if ("showPriority" in patch)
+        merged.priority = Boolean(patch.showPriority);
       if ("assignees" in patch) merged.showAssignee = Boolean(patch.assignees);
-      if ("showAssignee" in patch) merged.assignees = Boolean(patch.showAssignee);
+      if ("showAssignee" in patch)
+        merged.assignees = Boolean(patch.showAssignee);
       if ("due" in patch) merged.showDueDate = Boolean(patch.due);
       if ("showDueDate" in patch) merged.due = Boolean(patch.showDueDate);
       if ("tags" in patch) merged.showTags = Boolean(patch.tags);
@@ -131,7 +129,8 @@ export const useUiStore = create<UiState>((set) => ({
   panelSheetOpen: false,
   setPanelSheetOpen: (panelSheetOpen) => set({ panelSheetOpen }),
   notificationsSeenAt: null,
-  markNotificationsSeen: () => set({ notificationsSeenAt: new Date().toISOString() }),
+  markNotificationsSeen: () =>
+    set({ notificationsSeenAt: new Date().toISOString() }),
   toastMessage: null,
   toast: (message) => {
     set({ toastMessage: message });
