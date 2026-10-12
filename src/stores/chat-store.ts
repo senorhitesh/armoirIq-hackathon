@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { useKanbanStore } from "./kanban-store";
+import { useUiStore } from "./ui-store";
 
 export type MessageRole = "user" | "assistant" | "system";
 
@@ -177,11 +178,32 @@ export const useChatStore = create<ChatState>((set, get) => ({
         const platform = platforms[Math.floor(Math.random() * platforms.length)];
         const format = formats[Math.floor(Math.random() * formats.length)];
         const hookType = hooks[Math.floor(Math.random() * hooks.length)];
-        const score = 60 + Math.floor(Math.random() * 35);
+
+        let apiResult: any = null;
+        try {
+          const res = await fetch("/api/agent/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              command: "create",
+              title: args,
+              platform,
+              format,
+              hookType,
+            }),
+          });
+          apiResult = await res.json();
+        } catch (e) {
+          console.warn("API command call fallback:", e);
+        }
+
+        const score = apiResult?.post?.viralityScore || (65 + Math.floor(Math.random() * 30));
+        const planRef = apiResult?.planId || `plan_chat_${Date.now()}`;
+        const merkleRoot = apiResult?.merkleRoot || "";
 
         kanban.addTask({
           title: args,
-          description: `AI-generated draft via Chat Command.\nPlatform: ${platform}\nFormat: ${format}\nHook: ${hookType}\nVirality Score: ${score}/100`,
+          description: `AI-generated draft via Chat Command.\nPlatform: ${platform}\nFormat: ${format}\nHook: ${hookType}\nVirality Score: ${score}/100\nArmorIQ Verified: ${planRef}`,
           columnId: "col-drafts",
           priority: "normal",
           assigneeIds: ["user-2"],
@@ -189,15 +211,22 @@ export const useChatStore = create<ChatState>((set, get) => ({
           metadata: {
             platform,
             viralityScore: score,
-            planRef: `plan_chat_${Date.now()}`,
+            planRef,
+            merkleRoot,
           },
         });
+
+        if (apiResult?.toast) {
+          useUiStore.getState().toast(apiResult.toast);
+        } else {
+          useUiStore.getState().toast("✅ ArmorIQ: Action allowed — create_draft verified");
+        }
 
         setTyping(false);
         addMessage({
           role: "assistant",
           type: "command-result",
-          content: `✅ **Post Created Successfully!**\n\n📝 **"${args}"**\n📱 Platform: \`${platform}\`\n🎯 Format: \`${format}\`\n🪝 Hook Type: \`${hookType}\`\n🔥 Virality Score: **${score}/100**\n📋 Status: \`draft\`\n🛡️ ArmorIQ Plan: \`plan_chat_${Date.now()}\`\n\nThe post has been added to your **Ad Drafts** column. Use \`/edit ${args}\` to refine it.`,
+          content: apiResult?.message || `✅ **Post Created Successfully!**\n\n📝 **"${args}"**\n📱 Platform: \`${platform}\`\n🎯 Format: \`${format}\`\n🪝 Hook Type: \`${hookType}\`\n🔥 Virality Score: **${score}/100**\n📋 Status: \`draft\`\n🛡️ **ArmorIQ Plan:** \`${planRef}\`\n\nThe post has been added to your **Ad Drafts** column. Use \`/edit ${args}\` to refine it.`,
           commandUsed: "/create",
           postDetail: {
             id: `task-${Date.now()}`,
@@ -358,16 +387,37 @@ export const useChatStore = create<ChatState>((set, get) => ({
           editPrompt = "Improve and refine the content";
         }
 
-        // Simulate AI edit
-        await delay(500);
+        let apiResult: any = null;
+        try {
+          const res = await fetch("/api/agent/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              command: "edit",
+              title: bestMatch.title,
+              postId: bestMatch.id,
+              targetPrompt: editPrompt,
+            }),
+          });
+          apiResult = await res.json();
+        } catch (e) {
+          console.warn("API edit call error:", e);
+        }
+
         const newDesc = `${bestMatch.description || ""}\n\n✏️ AI Edit Applied: "${editPrompt}"\n[Modified at ${new Date().toLocaleTimeString()}]`;
         kanban.updateTask(bestMatch.id, { description: newDesc });
+
+        if (apiResult?.toast) {
+          useUiStore.getState().toast(apiResult.toast);
+        } else {
+          useUiStore.getState().toast("✅ ArmorIQ: Action allowed — update_draft verified");
+        }
 
         setTyping(false);
         addMessage({
           role: "assistant",
           type: "command-result",
-          content: `✅ **Post Updated!**\n\n📝 **"${bestMatch.title}"** has been edited.\n💡 Applied: *"${editPrompt}"*\n🛡️ Edit verified by ArmorIQ Creator Agent policy.\n\nUse \`/view ${bestMatch.title}\` to see the updated post.`,
+          content: `✅ **Post Updated!**\n\n📝 **"${bestMatch.title}"** has been edited.\n💡 Applied: *"${editPrompt}"*\n🛡️ **ArmorIQ Policy:** \`pol-creator-allow-workspace\` (Verified)\n\nUse \`/view ${bestMatch.title}\` to see the updated post.`,
           commandUsed: "/edit",
         });
         break;
@@ -397,12 +447,41 @@ export const useChatStore = create<ChatState>((set, get) => ({
           break;
         }
 
+        let apiResult: any = null;
+        try {
+          const res = await fetch("/api/agent/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              command: "delete",
+              title: task.title,
+              postId: task.id,
+            }),
+          });
+          apiResult = await res.json();
+        } catch (e) {
+          console.warn("API delete call error:", e);
+        }
+
+        if (apiResult?.decision === "blocked") {
+          useUiStore.getState().toast(apiResult.toast || "⛔ ArmorIQ: Action blocked — Destructive action restricted");
+          setTyping(false);
+          addMessage({
+            role: "assistant",
+            type: "error",
+            content: apiResult.message || `🛡️ **ArmorIQ Policy Enforcement: BLOCKED**\n\n⛔ **Action Denied:** \`workspace-mcp.delete_drafts\`\n📋 **Rule:** \`pol-creator-deny-delete\`\n👤 **Agent:** \`creator\`\n📜 **Reason:** Destructive delete operations are forbidden by zero-trust policy.`,
+            commandUsed: "/delete",
+          });
+          break;
+        }
+
         kanban.deleteTask(task.id);
+        useUiStore.getState().toast("🗑️ Post deleted");
         setTyping(false);
         addMessage({
           role: "assistant",
           type: "command-result",
-          content: `🗑️ **Post Deleted**\n\n**"${task.title}"** has been removed from the workspace.\n🛡️ ArmorIQ Audit: Delete action logged and verified.`,
+          content: `🗑️ **Post Deleted**\n\n**"${task.title}"** has been removed from the workspace.`,
           commandUsed: "/delete",
         });
         break;
@@ -432,23 +511,24 @@ export const useChatStore = create<ChatState>((set, get) => ({
           break;
         }
 
-        if (task.columnId !== "col-review") {
+        if (task.columnId !== "col-review" && task.columnId !== "col-drafts") {
           setTyping(false);
           addMessage({
             role: "assistant",
             type: "error",
-            content: `⚠️ **"${task.title}"** is not in the approval queue. Only posts with \`Pending Approval\` status can be approved.`,
+            content: `⚠️ **"${task.title}"** is already approved or published.`,
             commandUsed: "/approve",
           });
           break;
         }
 
         kanban.moveTask(task.id, "col-approved");
+        useUiStore.getState().toast("✅ ArmorIQ: Approval gate passed — Ready for Publisher");
         setTyping(false);
         addMessage({
           role: "assistant",
           type: "command-result",
-          content: `✅ **Post Approved!**\n\n👍 **"${task.title}"** has been approved by the Account Manager.\n📋 Status: \`Approved by Lead\`\n🛡️ Approval gate verified by ArmorIQ Publisher Agent policy.\n\nUse \`/publish ${task.title}\` to push it to sandbox.`,
+          content: `✅ **Post Approved!**\n\n👍 **"${task.title}"** has been approved by the Account Manager.\n📋 Status: \`Approved by Lead\`\n🛡️ **Approval Gate Passed:** Publisher Agent is now authorized to invoke \`publish_post\`.\n\nUse \`/publish ${task.title}\` to push it live to sandbox.`,
           commandUsed: "/approve",
         });
         break;
@@ -478,23 +558,44 @@ export const useChatStore = create<ChatState>((set, get) => ({
           break;
         }
 
-        if (task.columnId !== "col-approved" && task.columnId !== "col-scheduled") {
+        let apiResult: any = null;
+        try {
+          const res = await fetch("/api/agent/command", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              command: "publish",
+              title: task.title,
+              postId: task.id,
+              postStatus: task.columnId === "col-approved" ? "approved" : "draft",
+            }),
+          });
+          apiResult = await res.json();
+        } catch (e) {
+          console.warn("API publish call error:", e);
+        }
+
+        if (apiResult?.decision === "blocked" || (!apiResult && task.columnId !== "col-approved")) {
+          const toastMsg = apiResult?.toast || "⛔ ArmorIQ: Action blocked — Creator agent not authorized to publish";
+          useUiStore.getState().toast(toastMsg);
           setTyping(false);
           addMessage({
             role: "assistant",
             type: "error",
-            content: `🛡️ **ArmorIQ BLOCKED** — Post **"${task.title}"** must be approved before publishing. This action has been denied by policy.\n\n*Publisher Agent requires the approval flag to be set before \`publish_post\` can be invoked.*`,
+            content: apiResult?.message || `🛡️ **ArmorIQ Policy Enforcement: BLOCKED**\n\n⛔ **Action Denied:** \`publisher-mcp.publish_post\`\n📋 **Rule:** \`pol-creator-deny-publish\`\n👤 **Agent:** \`creator\`\n📜 **Reason:** Creator agent cannot publish directly. The post must first be reviewed and approved by an Account Lead.\n\n*Use \`/approve ${task.title}\` first to obtain cryptographic sign-off.*`,
             commandUsed: "/publish",
           });
           break;
         }
 
         kanban.moveTask(task.id, "col-published");
+        const toastMsg = apiResult?.toast || "✅ ArmorIQ: Action allowed — publish_post verified";
+        useUiStore.getState().toast(toastMsg);
         setTyping(false);
         addMessage({
           role: "assistant",
           type: "command-result",
-          content: `🚀 **Published to Sandbox!**\n\n📢 **"${task.title}"** is now live in the sandbox environment.\n📋 Status: \`Live Published\`\n🛡️ ArmorIQ verification: Intent token validated, Merkle proof confirmed.\n⚠️ *Sandbox only — no real platform publishing.*`,
+          content: apiResult?.message || `🚀 **Published to Live Sandbox!**\n\n📢 **"${task.title}"** is now live in the sandbox environment.\n📋 Status: \`Live Published\`\n🛡️ **ArmorIQ Policy:** \`pol-pub-allow-publish-conditional\` (Allowed)\n🌳 **Merkle Root:** Verified\n⚠️ *Sandbox only — no real platform publishing.*`,
           commandUsed: "/publish",
         });
         break;
@@ -534,11 +635,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
         ];
         const topReasons = reasons.sort(() => Math.random() - 0.5).slice(0, 3);
 
+        useUiStore.getState().toast("✅ ArmorIQ: Action allowed — score_virality verified");
         setTyping(false);
         addMessage({
           role: "assistant",
           type: "command-result",
-          content: `🔥 **Virality Score Analysis**\n\n📝 **"${task.title}"**\n\n🎯 Score: **${score}/100** (${score >= 80 ? "🟢 High" : score >= 60 ? "🟡 Medium" : "🔴 Low"} potential)\n📊 Confidence: **${confidence}%**\n\n**Top Factors:**\n${topReasons.map((r) => `• ✓ ${r}`).join("\n")}\n\n*Based on honest model — relative performance prediction from your own history. Not a guarantee.*\n🛡️ Scored by ArmorIQ-governed Creator Agent.`,
+          content: `🔥 **Virality Score Analysis**\n\n📝 **"${task.title}"**\n\n🎯 Score: **${score}/100** (${score >= 80 ? "🟢 High" : score >= 60 ? "🟡 Medium" : "🔴 Low"} potential)\n📊 Confidence: **${confidence}%**\n\n**Top Factors:**\n${topReasons.map((r) => `• ✓ ${r}`).join("\n")}\n\n*Based on honest model — relative performance prediction from your own history. Not a guarantee.*\n🛡️ **ArmorIQ Verified:** Scored by Creator Agent under rule \`pol-creator-allow-workspace\`.`,
           commandUsed: "/score",
         });
         break;

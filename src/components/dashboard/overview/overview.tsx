@@ -30,74 +30,160 @@ interface RecentPostItem {
   date: string;
 }
 
-const RECENT_POSTS: RecentPostItem[] = [
-  {
-    id: "post-1",
-    title: "ScaleFlow Q4 Contrarian Growth Ad",
-    platform: "LinkedIn",
-    status: "Live Published",
-    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
-    views: "428,900",
-    ctr: "5.12%",
-    spend: "$3,240",
-    date: "Sep 28, 2026",
+interface AccountData {
+  name: string;
+  ctr: string;
+  ctrDiff: string;
+  ctrPercent: number;
+  totalViews: string;
+  viewsDiff: string;
+  conversionRate: string;
+  convDiff: string;
+  moneySpent: string;
+  budgetRemaining: string;
+  budgetPercent: number;
+  pacingSubtitle: string;
+  recentPosts: RecentPostItem[];
+}
+
+const ACCOUNT_DATA: Record<string, AccountData> = {
+  "meta-ads-account": {
+    name: "Meta Ads Account",
+    ctr: "4.82%",
+    ctrDiff: "+1.35% vs Last Month",
+    ctrPercent: 78,
+    totalViews: "1,842,500",
+    viewsDiff: "+24.8% vs Last Month",
+    conversionRate: "3.65%",
+    convDiff: "+0.85% vs Target",
+    moneySpent: "$14,820",
+    budgetRemaining: "$10,180",
+    budgetPercent: 59.3,
+    pacingSubtitle: "Pacing at 59.3% of $25,000 cap",
+    recentPosts: [
+      {
+        id: "post-2",
+        title: "Meta 3-Second Urgency Hook Script",
+        platform: "Meta",
+        status: "Pending Approval",
+        statusColor: "text-amber-700 bg-amber-50 border-amber-200",
+        views: "312,400",
+        ctr: "4.88%",
+        spend: "$2,650",
+        date: "Sep 25, 2026",
+      },
+      {
+        id: "post-4",
+        title: "CAC Mythbuster 2026 Carousel",
+        platform: "Instagram",
+        status: "Live Published",
+        statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
+        views: "542,100",
+        ctr: "4.65%",
+        spend: "$4,120",
+        date: "Sep 19, 2026",
+      },
+      {
+        id: "post-6",
+        title: "Autonomous Ad Scaling Deep-Dive",
+        platform: "Meta",
+        status: "Draft",
+        statusColor: "text-slate-600 bg-slate-100 border-slate-200",
+        views: "81,200",
+        ctr: "3.10%",
+        spend: "$800",
+        date: "Sep 11, 2026",
+      },
+    ],
   },
-  {
-    id: "post-2",
-    title: "Meta 3-Second Urgency Hook Script",
-    platform: "Meta",
-    status: "Pending Approval",
-    statusColor: "text-amber-700 bg-amber-50 border-amber-200",
-    views: "312,400",
-    ctr: "4.88%",
-    spend: "$2,650",
-    date: "Sep 25, 2026",
+  "linkedin-b2b-growth": {
+    name: "LinkedIn B2B Growth",
+    ctr: "5.64%",
+    ctrDiff: "+2.10% vs Last Month",
+    ctrPercent: 86,
+    totalViews: "980,400",
+    viewsDiff: "+15.2% vs Last Month",
+    conversionRate: "6.12%",
+    convDiff: "+1.90% vs Target",
+    moneySpent: "$18,450",
+    budgetRemaining: "$6,550",
+    budgetPercent: 73.8,
+    pacingSubtitle: "Pacing at 73.8% of $25,000 cap",
+    recentPosts: [
+      {
+        id: "post-1",
+        title: "ScaleFlow Q4 Contrarian Growth Ad",
+        platform: "LinkedIn",
+        status: "Live Published",
+        statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
+        views: "428,900",
+        ctr: "5.12%",
+        spend: "$3,240",
+        date: "Sep 28, 2026",
+      },
+      {
+        id: "post-5",
+        title: "Zero-Trust Attribution Explainer",
+        platform: "LinkedIn",
+        status: "Live Published",
+        statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
+        views: "294,000",
+        ctr: "4.21%",
+        spend: "$2,210",
+        date: "Sep 15, 2026",
+      },
+      {
+        id: "post-7",
+        title: "Enterprise CMO Playbook Q4",
+        platform: "LinkedIn",
+        status: "Pending Approval",
+        statusColor: "text-amber-700 bg-amber-50 border-amber-200",
+        views: "257,500",
+        ctr: "6.30%",
+        spend: "$3,800",
+        date: "Sep 29, 2026",
+      },
+    ],
   },
-  {
-    id: "post-3",
-    title: "YouTube Shorts: AI Rogue Agent Leaks",
-    platform: "YouTube",
-    status: "Scheduled",
-    statusColor: "text-blue-700 bg-blue-50 border-blue-200",
-    views: "184,200",
+  "youtube-shorts-scale": {
+    name: "YouTube Shorts Scale",
     ctr: "3.92%",
-    spend: "$1,800",
-    date: "Sep 22, 2026",
+    ctrDiff: "+0.75% vs Last Month",
+    ctrPercent: 62,
+    totalViews: "3,420,100",
+    viewsDiff: "+41.8% vs Last Month",
+    conversionRate: "2.18%",
+    convDiff: "+0.45% vs Target",
+    moneySpent: "$9,600",
+    budgetRemaining: "$15,400",
+    budgetPercent: 38.4,
+    pacingSubtitle: "Pacing at 38.4% of $25,000 cap",
+    recentPosts: [
+      {
+        id: "post-3",
+        title: "YouTube Shorts: AI Rogue Agent Leaks",
+        platform: "YouTube",
+        status: "Scheduled",
+        statusColor: "text-blue-700 bg-blue-50 border-blue-200",
+        views: "1,184,200",
+        ctr: "3.92%",
+        spend: "$1,800",
+        date: "Sep 22, 2026",
+      },
+      {
+        id: "post-8",
+        title: "15s Hook Retention Breakdown",
+        platform: "YouTube",
+        status: "Live Published",
+        statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
+        views: "2,235,900",
+        ctr: "4.15%",
+        spend: "$3,400",
+        date: "Sep 24, 2026",
+      },
+    ],
   },
-  {
-    id: "post-4",
-    title: "CAC Mythbuster 2026 Carousel",
-    platform: "Instagram",
-    status: "Live Published",
-    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
-    views: "542,100",
-    ctr: "4.65%",
-    spend: "$4,120",
-    date: "Sep 19, 2026",
-  },
-  {
-    id: "post-5",
-    title: "Zero-Trust Attribution Explainer",
-    platform: "LinkedIn",
-    status: "Live Published",
-    statusColor: "text-emerald-700 bg-emerald-50 border-emerald-200",
-    views: "294,000",
-    ctr: "4.21%",
-    spend: "$2,210",
-    date: "Sep 15, 2026",
-  },
-  {
-    id: "post-6",
-    title: "Autonomous Ad Scaling Deep-Dive",
-    platform: "Meta",
-    status: "Draft",
-    statusColor: "text-slate-600 bg-slate-100 border-slate-200",
-    views: "81,200",
-    ctr: "3.10%",
-    spend: "$800",
-    date: "Sep 11, 2026",
-  },
-];
+};
 
 const MONTHLY_BARS = [
   { month: "Apr", value: 45, label: "45k" },
@@ -122,6 +208,8 @@ export default function Overview() {
   const setTab = useUiStore((state) => state.setTab);
   const openDialog = useUiStore((state) => state.openDialog);
   const toast = useUiStore((state) => state.toast);
+  const selectedAccount = useUiStore((state) => state.selectedAccount);
+  const current = ACCOUNT_DATA[selectedAccount] || ACCOUNT_DATA["meta-ads-account"];
   const [selectedMonth, setSelectedMonth] = useState("Last Month");
   const [hoveredBar, setHoveredBar] = useState<number | null>(4); // August by default
   const [checkedOrders, setCheckedOrders] = useState<Record<string, boolean>>({ "ORD-2341": true });
@@ -199,16 +287,16 @@ export default function Overview() {
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    4.82%
+                    {current.ctr}
                   </span>
                 </div>
                 <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
                   <TrendingUp className="size-3.5" />
-                  <span>+1.35% vs Last Month</span>
+                  <span>{current.ctrDiff}</span>
                 </div>
                 {/* Mini sparkline curve indicator */}
                 <div className="mt-3 h-1.5 w-full bg-blue-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600 rounded-full w-[78%]" />
+                  <div className="h-full bg-blue-600 rounded-full transition-all duration-500" style={{ width: `${current.ctrPercent}%` }} />
                 </div>
               </div>
 
@@ -224,12 +312,12 @@ export default function Overview() {
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    1,842,500
+                    {current.totalViews}
                   </span>
                 </div>
                 <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
                   <TrendingUp className="size-3.5" />
-                  <span>+24.8% vs Last Month</span>
+                  <span>{current.viewsDiff}</span>
                 </div>
                 <div className="mt-3 h-1.5 w-full bg-emerald-100 rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 rounded-full w-[85%]" />
@@ -248,12 +336,12 @@ export default function Overview() {
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    3.65%
+                    {current.conversionRate}
                   </span>
                 </div>
                 <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
                   <TrendingUp className="size-3.5" />
-                  <span>+0.85% vs Target</span>
+                  <span>{current.convDiff}</span>
                 </div>
                 <div className="mt-3 h-1.5 w-full bg-indigo-100 rounded-full overflow-hidden">
                   <div className="h-full bg-indigo-600 rounded-full w-[65%]" />
@@ -272,7 +360,7 @@ export default function Overview() {
                       MONEY SPENT IN 30 DAYS
                     </span>
                     <p className="text-[11px] text-slate-400 mt-0.5">
-                      Pacing at 59.3% of $25,000 cap
+                      {current.pacingSubtitle}
                     </p>
                   </div>
                   <div className="size-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
@@ -281,7 +369,7 @@ export default function Overview() {
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    $14,820
+                    {current.moneySpent}
                   </span>
                   <span className="text-xs font-medium text-slate-500">
                     / $25,000 cap
@@ -289,11 +377,11 @@ export default function Overview() {
                 </div>
                 <div className="mt-3">
                   <div className="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
-                    <span>Spent: $14,820</span>
-                    <span>59.3%</span>
+                    <span>Spent: {current.moneySpent}</span>
+                    <span>{current.budgetPercent}%</span>
                   </div>
                   <div className="h-2 w-full bg-amber-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-amber-500 rounded-full w-[59.3%]" />
+                    <div className="h-full bg-amber-500 rounded-full transition-all duration-500" style={{ width: `${current.budgetPercent}%` }} />
                   </div>
                 </div>
               </div>
@@ -315,7 +403,7 @@ export default function Overview() {
                 </div>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-3xl font-extrabold tracking-tight text-slate-900">
-                    $10,180
+                    {current.budgetRemaining}
                   </span>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 border border-teal-200">
                     $339 / day
@@ -496,7 +584,7 @@ export default function Overview() {
                   <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5">
                     <span>RECENT POST</span>
                     <span className="text-xs font-normal text-slate-400 font-mono">
-                      ({RECENT_POSTS.length})
+                      ({current.recentPosts.length})
                     </span>
                   </h2>
                   <p className="text-[11px] text-slate-500">
@@ -518,7 +606,7 @@ export default function Overview() {
 
               {/* Vertical Stack of Posts matching Wireframe image */}
               <div className="mt-4 flex flex-col gap-3">
-                {RECENT_POSTS.map((post) => (
+                {current.recentPosts.map((post) => (
                   <div
                     key={post.id}
                     className="group relative flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-all hover:border-blue-300 hover:bg-blue-50/20 hover:shadow-2xs"

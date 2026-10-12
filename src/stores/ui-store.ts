@@ -73,6 +73,8 @@ interface UiState {
   toasts: Array<{ id: string; title: string }>;
   toast: (message: string) => void;
   clearToast: () => void;
+  selectedAccount: string;
+  setSelectedAccount: (account: string) => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -80,6 +82,8 @@ export const useUiStore = create<UiState>((set) => ({
   setTab: (tab) => set({ tab }),
   nav: "analytics",
   setNav: (nav) => set({ nav }),
+  selectedAccount: "meta-ads-account",
+  setSelectedAccount: (selectedAccount) => set({ selectedAccount }),
   sidebarOpen: false,
   setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
   sidebarCollapsed: false,

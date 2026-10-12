@@ -32,7 +32,8 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const [draft, setDraft] = useState(title);
-  const [selectedAccount, setSelectedAccount] = useState("meta-ads-account");
+  const selectedAccount = useUiStore((state) => state.selectedAccount);
+  const setSelectedAccount = useUiStore((state) => state.setSelectedAccount);
 
   useEffect(() => {
     document.title = `${title} - AdLoop`;

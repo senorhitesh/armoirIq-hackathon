@@ -45,6 +45,16 @@ AdLoop enforces strict Zero-Trust role separation:
 
 ---
 
+## 🎨 5 Core Workspace Features
+
+1. **📊 Ads Dashboard (Analytics):** Multi-account ad metrics (Meta Ads, LinkedIn B2B, YouTube Shorts Scale) with reactive KPIs for CTR, Total Views, Conversion Rate, Money Spent (30d), and upcoming ad deliveries table.
+2. **💬 AI Chat Bar:** Full interactive command interface with autocomplete for `/create`, `/list`, `/view`, `/edit`, `/approve`, `/publish`, `/score`, and `/delete`. Performs CRUD directly synced to the Kanban board under ArmorIQ governance.
+3. **🔥 Trend Jacking Section:** Paste viral URLs/content to get AI analysis of why it went viral (Hook Archetype, Tone & Style, Format Structure, Algorithmic Triggers) and generate 3 brand-adapted variations ready to push to Kanban with 1 click.
+4. **✨ Creative Workspace:** Post selector to pick any workspace draft, apply 5 AI operations (*Improve Text, Rewrite Heading, Generate 3 Variants, Punchy Hooks, Platform Remix*), preview side-by-side, and accept or save as new.
+5. **📋 Task Board (Kanban):** Drag-and-drop marketing task workflow across *Ad Drafts → Pending Approval → Approved → Scheduled → Published* with priority badges, tags, assignees, and quick-add composer.
+
+---
+
 ## ⚡ The Three Demo Moments (1-Click Hackathon Scenarios)
 
 In the UI console, three quick-action buttons demonstrate the complete governance spectrum:

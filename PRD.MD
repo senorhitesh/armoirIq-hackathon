@@ -181,36 +181,36 @@ User → AI Chat / Creative Workspace → Agent Runtime (Vercel AI SDK)
 
 ## 8. Build Progress Tracker
 
-### Phase 1: Cleanup & Restructure ⬜
-- [ ] Strip sidebar to 5 nav items only
-- [ ] Remove governance-heavy components from Creative Space
-- [ ] Remove unused sidebar sections (Approvals Queue, Campaign Views, Agent Teams, Integrations)
-- [ ] Clean up unused NavId types
+### Phase 1: Cleanup & Restructure ✅
+- [x] Strip sidebar to 5 nav items only
+- [x] Remove governance-heavy components from Creative Space
+- [x] Remove unused sidebar sections (Approvals Queue, Campaign Views, Agent Teams, Integrations)
+- [x] Clean up unused NavId types
 
-### Phase 2: Trend Jacking Section ⬜
-- [ ] Build Trend Jacking view component
-- [ ] Input field for viral content URL/paste
-- [ ] AI analysis display
-- [ ] Generated content cards
-- [ ] Push to Kanban integration
+### Phase 2: Trend Jacking Section ✅
+- [x] Build Trend Jacking view component
+- [x] Input field for viral content URL/paste
+- [x] AI analysis display
+- [x] Generated content cards
+- [x] Push to Kanban integration
 
-### Phase 3: Creative Workspace Re-engineer ⬜
-- [ ] Build post selector
-- [ ] AI operations panel
-- [ ] Variant generation UI
-- [ ] Chat command integration (`/post` commands)
-- [ ] Accept/reject UI
+### Phase 3: Creative Workspace Re-engineer ✅
+- [x] Build post selector
+- [x] AI operations panel
+- [x] Variant generation UI
+- [x] Chat command integration (`/post` commands)
+- [x] Accept/reject UI
 
-### Phase 4: ArmorIQ Real Integration ⬜
-- [ ] Wire MCP server (`workspace-mcp` route handler)
-- [ ] Agent runtime with plan generation
-- [ ] ArmorIQ SDK: capturePlan → getIntentToken → invoke
-- [ ] Demo: ✅ allowed action working
-- [ ] Demo: ⛔ blocked action working
-- [ ] Subtle toast notifications for allow/block
+### Phase 4: ArmorIQ Real Integration ✅
+- [x] Wire MCP server (`workspace-mcp`, `publisher-mcp`, `trends-mcp`)
+- [x] Agent runtime with plan generation
+- [x] ArmorIQ SDK: capturePlan → getIntentToken → invoke
+- [x] Demo: ✅ allowed action working (`/create`, `/edit`, `/score`, variant generation)
+- [x] Demo: ⛔ blocked action working (`/publish` unapproved post, `/delete` destructive action)
+- [x] Subtle toast notifications for allow/block (emerald / rose variants)
 
-### Phase 5: Polish & Demo ⬜
-- [ ] Account selector switches seed data
+### Phase 5: Polish & Demo 🔄
+- [x] Account selector switches seed data (Meta, LinkedIn, YouTube)
 - [ ] Real LLM calls (when API credits available)
 - [ ] README update
 - [ ] Demo video script

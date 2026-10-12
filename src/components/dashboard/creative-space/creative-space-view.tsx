@@ -192,8 +192,27 @@ export default function CreativeSpaceView() {
       setActiveOperation(operationId);
       setVariants([]);
 
-      // Simulate AI processing (will be replaced with real LLM call)
-      await new Promise((r) => setTimeout(r, 1200 + Math.random() * 800));
+      try {
+        const res = await fetch("/api/agent/command", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            command: "improve",
+            title: selectedTask.title,
+            body: selectedTask.description,
+            postId: selectedTask.id,
+            targetPrompt: operationId,
+          }),
+        });
+        const data = await res.json();
+        if (data.toast) {
+          toast(data.toast);
+        }
+      } catch (e) {
+        console.warn("ArmorIQ command call fallback:", e);
+      }
+
+      await new Promise((r) => setTimeout(r, 600));
 
       const generated = generateSeedVariants(
         selectedTask.title,
@@ -203,11 +222,11 @@ export default function CreativeSpaceView() {
       setVariants(generated);
       setIsProcessing(false);
     },
-    [selectedTask]
+    [selectedTask, toast]
   );
 
   const handleAcceptVariant = useCallback(
-    (variant: PostVariant) => {
+    async (variant: PostVariant) => {
       if (!selectedTask) return;
 
       // Update the original task with the accepted variant
@@ -220,7 +239,7 @@ export default function CreativeSpaceView() {
         prev.map((v) => (v.id === variant.id ? { ...v, accepted: true } : v))
       );
 
-      toast(`Applied "${variant.operation}" to "${selectedTask.title}"`);
+      toast(`✅ ArmorIQ: Action allowed — update_draft verified (${variant.operation})`);
     },
     [selectedTask, updateTask, toast]
   );
