@@ -82,9 +82,10 @@ export class ArmorIQGovernanceEngine {
     planCapture: PlanCapture,
     validitySeconds: number = 300
   ): Promise<IssuedIntentToken> {
-    // 1. First, evaluate policies for all steps in the plan
     for (const step of planCapture.steps) {
-      const policyCheck = evaluatePolicy(planCapture.agent, step.mcp, step.action, step.params);
+      const policyCheck = evaluatePolicy(planCapture.agent, step.mcp, step.action, {
+        postStatus: step.params?.postStatus,
+      });
       if (!policyCheck.allowed) {
         // Log to ArmorIQ audit log
         const auditEntry: ArmorIQAuditLogEntry = {

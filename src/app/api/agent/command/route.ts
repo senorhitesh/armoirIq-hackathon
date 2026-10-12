@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
         stepNumber: 1,
         mcp: "publisher-mcp",
         action: "publish_post",
-        params: { postId: postId || "approved-id", title },
+        params: { postId: postId || "approved-id", title, postStatus: "approved" },
         description: "Publish human-approved ad to live sandbox queue",
       };
 
