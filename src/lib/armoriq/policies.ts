@@ -19,6 +19,14 @@ export const ARMORIQ_POLICIES: ArmorIQPolicyRule[] = [
     description: 'Strategist may inspect trending topics and format patterns'
   },
   {
+    id: 'pol-strat-allow-scrape',
+    agent: 'strategist',
+    targetMcp: 'scraper-mcp',
+    actionPattern: 'scrape_social_post|extract_viral_blueprint',
+    effect: 'allow',
+    description: 'Strategist may scrape public social posts and extract viral blueprints'
+  },
+  {
     id: 'pol-strat-allow-metrics',
     agent: 'strategist',
     targetMcp: 'workspace-mcp',

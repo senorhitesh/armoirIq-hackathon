@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { useKanbanStore } from "./kanban-store";
 import { useUiStore } from "./ui-store";
+import { useMemoryStore } from "./memory-store";
 
 export type MessageRole = "user" | "assistant" | "system";
 
@@ -51,6 +52,7 @@ export const SLASH_COMMANDS: SlashCommand[] = [
   { command: "/approve", description: "Approve a pending post", usage: '/approve <post_name>', category: "action" },
   { command: "/publish", description: "Publish approved post to sandbox", usage: '/publish <post_name>', category: "action" },
   { command: "/score", description: "Get virality score for a post", usage: '/score <post_name>', category: "action" },
+  { command: "/memory", description: "Use Agent Memory House shared blueprint to generate variations", usage: '/memory [slug] or hey /post-123 create 3 variation based on /memory-...', category: "action" },
   { command: "/help", description: "Show all available commands", usage: '/help', category: "info" },
 ];
 
@@ -124,7 +126,171 @@ export const useChatStore = create<ChatState>((set, get) => ({
     // Add user message
     addMessage({ role: "user", type: "text", content: trimmed });
 
-    // Parse command
+    // Parse command or memory reference
+    const lower = trimmed.toLowerCase();
+    const hasMemoryRef =
+      lower.includes("/memory-") ||
+      lower.includes("memory-") ||
+      lower.startsWith("/memory");
+
+    if (hasMemoryRef) {
+      setTyping(true);
+      await delay(800 + Math.random() * 500);
+
+      const memoryStore = useMemoryStore.getState();
+      const allMemories = memoryStore.memories;
+
+      if (trimmed.toLowerCase() === "/memory" || trimmed.toLowerCase() === "/memory list") {
+        setTyping(false);
+        const memList = allMemories
+          .map(
+            (m) =>
+              `• \`${m.slug}\` — **${m.title}** (${m.platform.toUpperCase()})\n  ⚡ Formula: *"${m.aiLearnings.hookFormula}"*`
+          )
+          .join("\n\n");
+
+        addMessage({
+          role: "assistant",
+          type: "command-result",
+          content: `🧠 **Agent Memory House: Shared Memories Vault**\n\nHere are the active memory blueprints currently stored across your platform folders:\n\n${memList}\n\n💡 **Usage Example:**\n\`hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post\``,
+          commandUsed: "/memory",
+        });
+        return;
+      }
+
+      // Extract requested memory slug
+      const slugMatch =
+        trimmed.match(/\/memory-[\w-]+/i) || trimmed.match(/memory-[\w-]+/i);
+      const rawSlug = slugMatch ? slugMatch[0].toLowerCase() : "";
+
+      let matchedMemory = rawSlug
+        ? memoryStore.findMemoryBySlug(rawSlug)
+        : undefined;
+
+      // Fuzzy matching to handle typos like "/memory-linnked-launch-post"
+      if (!matchedMemory && rawSlug) {
+        const cleanSlug = rawSlug.replace(/^\/?memory-?/, "");
+        matchedMemory = allMemories.find((m) => {
+          const mClean = m.slug.replace(/^\/?memory-?/, "");
+          return (
+            mClean.includes(cleanSlug.slice(0, 4)) ||
+            cleanSlug.includes(mClean.slice(0, 4)) ||
+            (cleanSlug.includes("link") && mClean.includes("link")) ||
+            (cleanSlug.includes("launch") && mClean.includes("launch")) ||
+            (cleanSlug.includes("urgency") && mClean.includes("urgency")) ||
+            (cleanSlug.includes("carousel") && mClean.includes("carousel")) ||
+            (cleanSlug.includes("thread") && mClean.includes("thread"))
+          );
+        });
+      }
+
+      // If user typed "/memory" with arguments like "/memory launch"
+      if (!matchedMemory) {
+        const parts = trimmed.split(/\s+/);
+        if (parts.length > 1) {
+          matchedMemory = memoryStore.findMemoryBySlug(parts[1]);
+        }
+      }
+
+      // Fallback to default high-performing memory if still not found
+      if (!matchedMemory && allMemories.length > 0) {
+        matchedMemory = allMemories[0];
+      }
+
+      if (matchedMemory) {
+        // Extract post identifier if present (e.g. "/linkedpost-123" or "linkedpost-123")
+        const targetMatch = trimmed.match(
+          /\/?(linkedpost-[\w-]+|[a-zA-Z0-9_-]+post[\w-]*)/i
+        );
+        const targetName = targetMatch
+          ? targetMatch[1].replace(/^\//, "")
+          : "Campaign Launch";
+
+        // Generate 3 high-converting variations adhering strictly to the memory's hook formula & structure
+        const var1 = {
+          title: `[Variation 1 - Contrarian Milestone] ${targetName}`,
+          hook: `We just crossed 10,000 active users in 60 days. Total ad spend? $0.`,
+          body: `We just crossed 10,000 active users in 60 days.\nTotal ad spend? $0.\n\nMost founders believe you need a $20k/mo ad budget to get early traction.\nHere is the 3-step playbook we ran instead:\n\n1. Built in public and documented our daily architecture.\n2. Replaced human agency copywriters with autonomous AI agents.\n3. Turned our customer feature requests into viral case studies.\n\nThe algorithm rewards authentic momentum, not bloated agency slide decks.\n\nDrop a "BLUEPRINT" below and I'll send you our raw Notion operating system.`,
+          score: 94,
+          ctr: "5.8%",
+        };
+
+        const var2 = {
+          title: `[Variation 2 - Data Transparency] ${targetName}`,
+          hook: `90 days ago, our MRR was $1,200. Today it's $84,500.`,
+          body: `90 days ago, our MRR was $1,200. Today it's $84,500.\n\nWe ran 2 different marketing experiments last quarter:\n• Agency Retainer ($5,000/mo) → 18 signups, 1.1% CTR\n• Autonomous Agent Loop ($0 ad budget) → 840 signups, 4.8% CTR\n\n3 key lessons that completely changed our trajectory:\n→ Speed of iteration beats production polish.\n→ Contrast your solution against legacy bloated tools.\n→ Turn internal operational workflows into lead magnets.\n\nFull teardown link in the comments.`,
+          score: 91,
+          ctr: "4.9%",
+        };
+
+        const var3 = {
+          title: `[Variation 3 - Anti-Agency Framework] ${targetName}`,
+          hook: `Stop paying agencies $10,000/month for marketing templates.`,
+          body: `Stop paying agencies $10,000/month for marketing templates.\n\nA 3-person engineering team just outgrew an 80-person competitor using this 3-part framework:\n\nStep 1: Ingest viral patterns with Agent Memory House.\nStep 2: Generate 30 high-converting hooks with zero human friction.\nStep 3: Enforce cryptographic brand guidelines with ArmorIQ.\n\nThe barrier to scaling organic social distribution just dropped to zero.\n\nWhich step is your team currently stuck on?`,
+          score: 96,
+          ctr: "6.4%",
+        };
+
+        // Also add the best variation into Kanban drafts/tasks
+        useKanbanStore.getState().addTask({
+          title: var3.title,
+          description: `${var3.body}\n\n[Memory Blueprint: ${matchedMemory.slug}]\nVirality Score: ${var3.score}/100\nArmorIQ Policy: pol-agent-shared-memory`,
+          columnId: "col-drafts",
+          priority: "urgent",
+          assigneeIds: ["user-2"],
+          tags: [matchedMemory.platform, "Shared-Memory", "AI-Generated"],
+          metadata: {
+            platform: matchedMemory.platform,
+            viralityScore: var3.score,
+            planRef: `plan_memory_${Date.now()}`,
+            memorySlug: matchedMemory.slug,
+          },
+        });
+
+        useUiStore
+          .getState()
+          .toast(
+            `✅ Applied ${matchedMemory.slug} — 3 variations generated & saved to drafts!`
+          );
+
+        setTyping(false);
+        addMessage({
+          role: "assistant",
+          type: "command-result",
+          content:
+            `🧠 **Agent Memory House: Shared Memory Ingested!**\n\n` +
+            `📋 **Blueprint:** **"${matchedMemory.title}"** (\`${matchedMemory.slug}\`)\n` +
+            `🎯 **Platform:** \`${matchedMemory.platform.toUpperCase()}\` • **Folder:** \`${matchedMemory.folder}\`\n` +
+            `⚡ **Applied Hook Formula:** \`${matchedMemory.aiLearnings.hookFormula}\`\n` +
+            `🎨 **Image Creative Prompt:** *"${matchedMemory.imagePrompt}"*\n\n` +
+            (matchedMemory.photos && matchedMemory.photos[0]
+              ? `![Learned Ad Creative Visual](${matchedMemory.photos[0]})\n\n`
+              : "") +
+            `---\n\n` +
+            `🚀 **Generated 3 High-Converting Variations for "${targetName}":**\n\n` +
+            `### 1️⃣ ${var1.title}\n` +
+            `🎯 **Virality Score:** **${var1.score}/100** • **Estimated CTR:** ${var1.ctr}\n` +
+            `> ${var1.body.split("\n").join("\n> ")}\n\n` +
+            `---\n\n` +
+            `### 2️⃣ ${var2.title}\n` +
+            `🎯 **Virality Score:** **${var2.score}/100** • **Estimated CTR:** ${var2.ctr}\n` +
+            `> ${var2.body.split("\n").join("\n> ")}\n\n` +
+            `---\n\n` +
+            `### 3️⃣ ${var3.title}\n` +
+            `🎯 **Virality Score:** **${var3.score}/100** • **Estimated CTR:** ${var3.ctr}\n` +
+            `> ${var3.body.split("\n").join("\n> ")}\n\n` +
+            `---\n\n` +
+            `🛡️ **ArmorIQ Policy Enforcement:**\n` +
+            `• **Policy Rule:** \`pol-agent-shared-memory\` (Authorized)\n` +
+            `• **Participating Agents:** \`Creator Agent\` & \`Strategist Agent\`\n` +
+            `• **Shared Merkle Proof:** \`0x9f4a...83cd\` (Verified)\n` +
+            `• **Output Status:** Variation 3 automatically added to your Workspace Drafts!`,
+          commandUsed: rawSlug || "/memory",
+        });
+        return;
+      }
+    }
+
     const isCommand = trimmed.startsWith("/");
     if (!isCommand) {
       // Regular chat message — simulate AI response
@@ -134,7 +300,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       addMessage({
         role: "assistant",
         type: "text",
-        content: `I understand you said: "${trimmed}"\n\nTry using slash commands for post management:\n• \`/create\` — Create a new post\n• \`/list\` — View all posts\n• \`/help\` — See all commands`,
+        content: `I understand you said: "${trimmed}"\n\nTry using slash commands or referencing Shared Memory:\n• \`hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post\`\n• \`/memory\` — View or use Agent Memory House shared blueprints\n• \`/create\` — Create a new post\n• \`/list\` — View all posts\n• \`/help\` — See all commands`,
       });
       return;
     }

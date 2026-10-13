@@ -14,7 +14,7 @@ import {
   ChatIcon,
   BarChartIcon,
 } from "@/components/_common/icons";
-import { Flame } from "lucide-react";
+import { Flame, CalendarDays, Brain } from "lucide-react";
 
 type SidebarContentProps = {
   collapsed: boolean;
@@ -140,16 +140,16 @@ export default function SidebarContent({
           }}
         />
 
-        {/* 3. Trend Jacking */}
+        {/* 3. Agent Memory House */}
         <SidebarItem
-          icon={Flame}
-          label="Trend Jacking"
+          icon={Brain}
+          label="Memory House"
           collapsed={collapsed}
           active={nav === "trends"}
           className={cn(
             "font-medium rounded-lg transition-all",
             nav === "trends" &&
-              "bg-orange-50/80 text-orange-700 border border-orange-200/60 shadow-xs",
+              "bg-slate-100 text-slate-900 border border-slate-200 shadow-2xs",
           )}
           onClick={() => {
             setNav("trends");
@@ -172,10 +172,10 @@ export default function SidebarContent({
           }}
         />
 
-        {/* 5. Kanban Board */}
+        {/* 5. Schedule & Planner */}
         <SidebarItem
-          icon={GridIcon}
-          label="Task Board"
+          icon={CalendarDays}
+          label="Schedule"
           collapsed={collapsed}
           active={nav === "workspace"}
           className={cn(

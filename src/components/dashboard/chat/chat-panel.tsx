@@ -1,5 +1,6 @@
 "use client";
 
+
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useChatStore, SLASH_COMMANDS, type ChatMessage } from "@/stores/chat-store";
@@ -25,12 +26,51 @@ import {
   Command,
   Zap,
   X,
+  Brain,
 } from "lucide-react";
 
 /* ─── Markdown-light renderer ─── */
 function renderMarkdown(text: string) {
   const lines = text.split("\n");
   return lines.map((line, i) => {
+    // Images
+    const imgMatch = line.match(/!\[(.*?)\]\((.*?)\)/);
+    if (imgMatch) {
+      return (
+        <div key={i} className="my-2.5 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 max-w-sm shadow-xs">
+          <img src={imgMatch[2]} alt={imgMatch[1]} className="w-full h-44 object-cover" />
+          {imgMatch[1] && (
+            <div className="p-2 bg-slate-50 text-[10.5px] font-medium text-slate-500 border-t border-slate-150">
+              🖼️ {imgMatch[1]}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Horizontal rule
+    if (line.trim() === "---") {
+      return <div key={i} className="my-3 border-t border-slate-200/80" />;
+    }
+
+    // Header 3
+    if (line.trim().startsWith("### ")) {
+      return (
+        <h4 key={i} className="text-xs font-bold text-slate-900 mt-3 mb-1">
+          {line.trim().replace(/^###\s+/, "")}
+        </h4>
+      );
+    }
+
+    // Blockquote
+    if (line.trim().startsWith("> ")) {
+      return (
+        <div key={i} className="my-1 border-l-2 border-purple-400 bg-purple-50/50 pl-2.5 py-1 text-xs text-slate-800 rounded-r-md">
+          <span dangerouslySetInnerHTML={{ __html: line.trim().replace(/^>\s*/, "").replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>') }} />
+        </div>
+      );
+    }
+
     // Bold
     let processed = line.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>');
     // Italic
@@ -63,6 +103,7 @@ function getCommandIcon(cmd?: string) {
     case "/approve": return <ThumbsUp className="w-3.5 h-3.5" />;
     case "/publish": return <Rocket className="w-3.5 h-3.5" />;
     case "/score": return <Sparkles className="w-3.5 h-3.5" />;
+    case "/memory": return <Brain className="w-3.5 h-3.5 text-purple-600" />;
     case "/help": return <HelpCircle className="w-3.5 h-3.5" />;
     default: return <Bot className="w-3.5 h-3.5" />;
   }
@@ -493,6 +534,44 @@ export default function ChatPanel() {
         </AnimatePresence>
 
         <div className="px-4 py-3">
+          {/* Quick Shared Memory Prompts */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 text-[11px]">
+            <span className="text-slate-400 font-medium shrink-0 flex items-center gap-1">
+              <Brain className="size-3 text-slate-600" />
+              Shared Memory:
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setInputValue("hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post");
+                inputRef.current?.focus();
+              }}
+              className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-800 border border-slate-200 px-2.5 py-0.5 font-medium shrink-0 transition-colors"
+            >
+              hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setInputValue("create 3 variation based on /memory-x-viral-thread");
+                inputRef.current?.focus();
+              }}
+              className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 px-2.5 py-0.5 font-medium shrink-0 transition-colors"
+            >
+              based on /memory-x-viral-thread
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setInputValue("/memory list");
+                inputRef.current?.focus();
+              }}
+              className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 px-2.5 py-0.5 font-mono shrink-0 transition-colors"
+            >
+              /memory list
+            </button>
+          </div>
+
           <div
             className={`flex items-end gap-3 rounded-2xl border p-3 transition-all duration-200 ${
               isFocused

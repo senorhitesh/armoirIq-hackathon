@@ -69,9 +69,9 @@ export default function Header() {
   const NAV_LABELS: Record<string, string> = {
     analytics: "Dashboard",
     chat: "AI Chat",
-    trends: "Trend Jacking",
+    trends: "Agent Memory House",
     "creative-space": "Creative Workspace",
-    workspace: "Task Board",
+    workspace: "Schedule",
   };
 
   return (

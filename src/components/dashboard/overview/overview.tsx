@@ -246,7 +246,7 @@ export default function Overview() {
               }}
               className="gap-1.5 font-medium text-xs shadow-2xs border border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
             >
-              <span>Open Kanban</span>
+              <span>Open Schedule</span>
               <ArrowUpRight className="size-3.5" />
             </Button>
             <Button

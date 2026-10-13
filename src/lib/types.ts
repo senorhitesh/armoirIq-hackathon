@@ -95,7 +95,7 @@ export type DecisionType = 'allowed' | 'blocked' | 'hold';
 export interface PlanStep {
   id: string;
   stepNumber: number;
-  mcp: 'trends-mcp' | 'workspace-mcp' | 'publisher-mcp';
+  mcp: 'trends-mcp' | 'workspace-mcp' | 'publisher-mcp' | 'scraper-mcp';
   action: string;
   params: Record<string, any>;
   description: string;
