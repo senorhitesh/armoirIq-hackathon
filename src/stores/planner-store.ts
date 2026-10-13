@@ -23,13 +23,21 @@ export type EventColor = "blue" | "purple" | "green" | "amber" | "rose";
 export interface PlannerEvent {
   id: string;
   title: string;
-  date: string; // "YYYY-MM-DD" e.g. "2026-10-13"
+  date: string; // "YYYY-MM-DD" e.g. "2026-10-15"
   dayIndex?: number; // 0 (Mon) to 6 (Sun) for backward compatibility
-  startHour: number; // e.g. 9 for 9 AM, 10.5 for 10:30 AM, 13 for 1 PM
+  startHour: number; // e.g. 9 for 9 AM, 20 for 8 PM
   durationHours: number; // e.g. 0.5, 1, 1.5, 2
-  displayTime: string; // e.g. "10 AM – 11:30 AM", "1 PM", "12 PM"
+  displayTime: string; // e.g. "8 PM – 9 PM"
   color: EventColor;
   description?: string;
+  isScheduledPost?: boolean;
+  armoriqEnabled?: boolean;
+  armoriqStatus?: "action-ready" | "in-action" | "verified" | "blocked";
+  postPayload?: {
+    platform: string;
+    hookCopy: string;
+    allocatedBudget: string;
+  };
 }
 
 export const TIME_SLOTS = [
@@ -180,6 +188,26 @@ function getInitialEvents(baseDate: Date = new Date()): PlannerEvent[] {
       displayTime: "2 PM – 3:30 PM",
       color: "green",
     },
+    // Thu 8 PM: Scheduled Viral Post governed by ArmorIQ
+    {
+      id: "evt-armoriq-15oct-8pm",
+      title: "🚀 Scheduled Post: Q4 Viral Launch",
+      date: getDayKey(3), // Thursday Oct 15!
+      dayIndex: 3,
+      startHour: 20, // 8 PM!
+      durationHours: 1,
+      displayTime: "8 PM – 9 PM",
+      color: "purple",
+      description: "Stop building products nobody asked for. Here is the 3-step validation framework that saved our company $240,000 in wasted ad spend.",
+      isScheduledPost: true,
+      armoriqEnabled: true,
+      armoriqStatus: "action-ready",
+      postPayload: {
+        platform: "𝕏 (Twitter) & LinkedIn",
+        hookCopy: "Stop building products nobody asked for. Here is the 3-step validation framework that saved our company $240,000 in wasted ad spend.",
+        allocatedBudget: "$240.00",
+      },
+    },
     // Fri
     {
       id: "evt-12",
@@ -252,6 +280,13 @@ interface PlannerState {
   addEvent: (event: Omit<PlannerEvent, "id">) => void;
   updateEvent: (id: string, updates: Partial<PlannerEvent>) => void;
   deleteEvent: (id: string) => void;
+
+  // ArmorIQ Guardrail Action State
+  armoriqModalOpen: boolean;
+  armoriqActiveEvent: PlannerEvent | null;
+  setArmoriqModalOpen: (open: boolean) => void;
+  setArmoriqActiveEvent: (event: PlannerEvent | null) => void;
+  openArmoriqForEvent: (event: PlannerEvent) => void;
 
   resetToDefaults: () => void;
 }
@@ -371,22 +406,50 @@ export const usePlannerStore = create<PlannerState>()(
           tasks: state.tasks.filter((task) => task.id !== id),
         })),
 
-      addEvent: (event) =>
+      // ArmorIQ Initial State & Actions
+      armoriqModalOpen: false,
+      armoriqActiveEvent: null,
+      setArmoriqModalOpen: (armoriqModalOpen) => set({ armoriqModalOpen }),
+      setArmoriqActiveEvent: (armoriqActiveEvent) => set({ armoriqActiveEvent }),
+      openArmoriqForEvent: (event) =>
+        set({ armoriqActiveEvent: event, armoriqModalOpen: true }),
+
+      addEvent: (event) => {
+        const isArmoriqTarget =
+          event.armoriqEnabled ||
+          ((event.date.endsWith("-10-15") || event.date === "2026-10-15") && event.startHour === 20) ||
+          event.title.toLowerCase().includes("scheduled") ||
+          event.title.toLowerCase().includes("launch");
+
+        const newEvt: PlannerEvent = {
+          ...event,
+          id: `evt-${Date.now()}`,
+          armoriqEnabled: isArmoriqTarget,
+          armoriqStatus: isArmoriqTarget ? (event.armoriqStatus || "action-ready") : undefined,
+        };
+
         set((state) => ({
-          events: [
-            ...state.events,
-            {
-              ...event,
-              id: `evt-${Date.now()}`,
-            },
-          ],
-        })),
+          events: [...state.events, newEvt],
+        }));
+      },
 
       updateEvent: (id, updates) =>
         set((state) => ({
-          events: state.events.map((evt) =>
-            evt.id === id ? { ...evt, ...updates } : evt
-          ),
+          events: state.events.map((evt) => {
+            if (evt.id !== id) return evt;
+            const updated = { ...evt, ...updates };
+            const isArmoriqTarget =
+              updated.armoriqEnabled ||
+              ((updated.date.endsWith("-10-15") || updated.date === "2026-10-15") && updated.startHour === 20) ||
+              updated.title.toLowerCase().includes("scheduled") ||
+              updated.title.toLowerCase().includes("launch");
+
+            return {
+              ...updated,
+              armoriqEnabled: isArmoriqTarget,
+              armoriqStatus: isArmoriqTarget ? (updated.armoriqStatus || "action-ready") : updated.armoriqStatus,
+            };
+          }),
         })),
 
       deleteEvent: (id) =>

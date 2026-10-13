@@ -15,7 +15,8 @@ import {
   parseDateKey,
 } from "@/lib/planner-utils";
 import EventModal from "./event-modal";
-import { GripVertical } from "lucide-react";
+import ArmorIQActionModal from "./armoriq-action-modal";
+import { GripVertical, Shield, Zap } from "lucide-react";
 
 const HOUR_HEIGHT = 72; // px per hour row
 const START_HOUR = 8; // 8 AM start
@@ -28,6 +29,12 @@ export default function CalendarGrid() {
   const setViewMode = usePlannerStore((state) => state.setViewMode);
   const updateEvent = usePlannerStore((state) => state.updateEvent);
   const addEvent = usePlannerStore((state) => state.addEvent);
+
+  // ArmorIQ Guardrail State
+  const armoriqModalOpen = usePlannerStore((state) => state.armoriqModalOpen);
+  const setArmoriqModalOpen = usePlannerStore((state) => state.setArmoriqModalOpen);
+  const armoriqActiveEvent = usePlannerStore((state) => state.armoriqActiveEvent);
+  const openArmoriqForEvent = usePlannerStore((state) => state.openArmoriqForEvent);
 
   const [currentTimeHour, setCurrentTimeHour] = useState(getCurrentHourFloat());
   const [selectedEvent, setSelectedEvent] = useState<PlannerEvent | null>(null);
@@ -71,6 +78,24 @@ export default function CalendarGrid() {
   const todayKey = formatDateKey(today);
 
   const weekDays = getWeekDates(parsedCurrentDate, today);
+
+  const oct15Event = events.find(
+    (e) =>
+      e.armoriqEnabled ||
+      ((e.date.endsWith("-10-15") || e.date === "2026-10-15") && e.startHour === 20)
+  ) || {
+    id: "evt-armoriq-15oct-8pm",
+    title: "🚀 Scheduled Post: Q4 Viral Launch",
+    date: "2026-10-15",
+    startHour: 20,
+    durationHours: 1,
+    displayTime: "8 PM – 9 PM",
+    color: "purple" as const,
+    description: "Stop building products nobody asked for. Here is the 3-step validation framework that saved our company $240,000 in wasted ad spend.",
+    isScheduledPost: true,
+    armoriqEnabled: true,
+    armoriqStatus: "action-ready" as const,
+  };
 
   const handleSlotClick = (dateKey: string, hour: number) => {
     setSelectedEvent(null);
@@ -506,6 +531,9 @@ export default function CalendarGrid() {
               const top = (evt.startHour - START_HOUR) * HOUR_HEIGHT;
               const height = evt.durationHours * HOUR_HEIGHT;
               const isDragging = draggingEventId === evt.id;
+              const isArmoriq =
+                evt.armoriqEnabled ||
+                ((evt.date.endsWith("-10-15") || evt.date === "2026-10-15") && evt.startHour === 20);
 
               return (
                 <div
@@ -516,24 +544,48 @@ export default function CalendarGrid() {
                   onClick={(e) => handleEventClick(e, evt)}
                   style={{
                     top: `${top + 2}px`,
-                    height: `${Math.max(height - 4, 34)}px`,
+                    height: `${Math.max(height - 4, isArmoriq ? 52 : 34)}px`,
                   }}
                   className={`absolute left-3 right-6 z-10 cursor-grab active:cursor-grabbing rounded-xl border-l-[4px] p-3 transition-all duration-150 shadow-xs hover:shadow-md hover:scale-[1.005] select-none ${
                     styles.container
-                  } ${isDragging ? "opacity-35 scale-[0.98] ring-2 ring-blue-400" : ""}`}
+                  } ${isDragging ? "opacity-35 scale-[0.98] ring-2 ring-blue-400" : ""} ${
+                    isArmoriq ? "ring-2 ring-emerald-500/80 shadow-md" : ""
+                  }`}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className={`text-sm font-semibold flex items-center gap-1.5 ${styles.title}`}>
-                        <GripVertical className="size-3 text-slate-400 opacity-60 inline" />
-                        {evt.title}
-                      </h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className={`text-sm font-semibold flex items-center gap-1.5 ${styles.title}`}>
+                          <GripVertical className="size-3 text-slate-400 opacity-60 inline" />
+                          {evt.title}
+                        </h4>
+                        {isArmoriq && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full">
+                            <Shield className="size-3 text-emerald-700" />
+                            ArmorIQ Gate Active
+                          </span>
+                        )}
+                      </div>
                       {evt.displayTime && (
                         <p className={`text-xs mt-0.5 pl-4.5 ${styles.time}`}>
                           {evt.displayTime}
                         </p>
                       )}
                     </div>
+
+                    {isArmoriq && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openArmoriqForEvent(evt);
+                        }}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                      >
+                        <Zap className="size-3 text-emerald-400" />
+                        <span>ArmorIQ Action</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -560,6 +612,34 @@ export default function CalendarGrid() {
       ref={scrollRef}
       className="flex flex-1 flex-col overflow-y-auto select-none bg-white"
     >
+      {/* ArmorIQ Zero-Trust Scheduled Gate Notice Banner */}
+      <div className="mx-6 my-2.5 rounded-xl border border-slate-800 bg-slate-900 text-white p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="size-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 shrink-0">
+            <Shield className="size-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-white">ArmorIQ Zero-Trust Gatekeeper:</span>
+              <span className="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-mono font-semibold border border-emerald-500/30">
+                ARMED FOR 8:00 PM (15 OCT)
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-300 mt-0.5">
+              Scheduled viral launch post on 15 Oct at 8:00 PM will trigger automated pre-publish prompt injection scans and budget verification.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => openArmoriqForEvent(oct15Event)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold shadow-xs transition-colors cursor-pointer shrink-0"
+        >
+          <Zap className="size-3.5" />
+          <span>Simulate 8 PM ArmorIQ Action</span>
+        </button>
+      </div>
+
       {/* 7-Day Headers Row */}
       <div className="sticky top-0 z-20 flex border-b border-slate-200 bg-white">
         {/* Left gutter aligned with time column */}
@@ -680,6 +760,9 @@ export default function CalendarGrid() {
                   const top = (evt.startHour - START_HOUR) * HOUR_HEIGHT;
                   const height = evt.durationHours * HOUR_HEIGHT;
                   const isDragging = draggingEventId === evt.id;
+                  const isArmoriq =
+                    evt.armoriqEnabled ||
+                    ((evt.date.endsWith("-10-15") || evt.date === "2026-10-15") && evt.startHour === 20);
 
                   return (
                     <div
@@ -690,12 +773,14 @@ export default function CalendarGrid() {
                       onClick={(e) => handleEventClick(e, evt)}
                       style={{
                         top: `${top + 2}px`,
-                        height: `${Math.max(height - 4, 30)}px`,
+                        height: `${Math.max(height - 4, isArmoriq ? 46 : 30)}px`,
                       }}
-                      title="Drag to reschedule or click to edit"
+                      title={isArmoriq ? "Protected by ArmorIQ Zero-Trust Guardrail (Click to inspect)" : "Drag to reschedule or click to edit"}
                       className={`absolute left-1 right-1 z-10 cursor-grab active:cursor-grabbing rounded-lg border-l-[3.5px] p-1.5 transition-all duration-150 shadow-2xs hover:shadow-xs hover:scale-[1.01] select-none ${
                         styles.container
-                      } ${isDragging ? "opacity-30 scale-95 ring-2 ring-blue-500" : ""}`}
+                      } ${isDragging ? "opacity-30 scale-95 ring-2 ring-blue-500" : ""} ${
+                        isArmoriq ? "ring-1 ring-emerald-500/80 shadow-xs" : ""
+                      }`}
                     >
                       <div className="flex flex-col h-full justify-between overflow-hidden">
                         <div>
@@ -715,6 +800,28 @@ export default function CalendarGrid() {
                             </p>
                           )}
                         </div>
+
+                        {/* ArmorIQ In-Action Badge & Trigger */}
+                        {isArmoriq && (
+                          <div className="mt-1 flex items-center justify-between gap-1 pt-0.5 border-t border-purple-200/50">
+                            <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-800 bg-emerald-100/90 px-1 py-0.2 rounded border border-emerald-300">
+                              <Shield className="size-2.5 text-emerald-700" />
+                              ArmorIQ Gate
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openArmoriqForEvent(evt);
+                              }}
+                              className="inline-flex items-center gap-0.5 text-[9px] font-bold bg-slate-900 hover:bg-slate-800 text-white px-1.5 py-0.5 rounded shadow-2xs transition-colors cursor-pointer"
+                              title="Click to trigger ArmorIQ Pre-Flight Guardrail"
+                            >
+                              <Zap className="size-2" />
+                              <span>Action</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -732,6 +839,13 @@ export default function CalendarGrid() {
         event={selectedEvent}
         defaultDateKey={modalSlot.dateKey}
         defaultStartHour={modalSlot.startHour}
+      />
+
+      {/* ArmorIQ Guardrail Action Modal */}
+      <ArmorIQActionModal
+        isOpen={armoriqModalOpen}
+        onClose={() => setArmoriqModalOpen(false)}
+        event={armoriqActiveEvent || oct15Event}
       />
     </div>
   );

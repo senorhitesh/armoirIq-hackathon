@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, Trash2, Calendar, Clock, Palette, GripHorizontal } from "lucide-react";
+import { X, Trash2, Calendar, Clock, Palette, GripHorizontal, Shield, Zap } from "lucide-react";
 import {
   EventColor,
   PlannerEvent,
@@ -30,6 +30,7 @@ export default function EventModal({
   const updateEvent = usePlannerStore((state) => state.updateEvent);
   const deleteEvent = usePlannerStore((state) => state.deleteEvent);
   const selectedDate = usePlannerStore((state) => state.selectedDate);
+  const openArmoriqForEvent = usePlannerStore((state) => state.openArmoriqForEvent);
 
   const initialDate = event?.date || defaultDateKey || selectedDate || formatDateKey(new Date());
 
@@ -281,6 +282,73 @@ export default function EventModal({
                 />
               ))}
             </div>
+          </div>
+
+          {/* ArmorIQ Zero-Trust Scheduled Gatekeeper Section */}
+          <div
+            className={`rounded-xl border p-3.5 space-y-2 transition-all ${
+              ((dateKey.endsWith("-10-15") || dateKey === "2026-10-15") && startHour === 20) ||
+              event?.armoriqEnabled
+                ? "border-emerald-300 bg-emerald-50/70"
+                : "border-slate-200 bg-slate-50"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Shield
+                  className={`size-4 ${
+                    ((dateKey.endsWith("-10-15") || dateKey === "2026-10-15") && startHour === 20) ||
+                    event?.armoriqEnabled
+                      ? "text-emerald-700"
+                      : "text-slate-600"
+                  }`}
+                />
+                <span
+                  className={`text-xs font-bold ${
+                    ((dateKey.endsWith("-10-15") || dateKey === "2026-10-15") && startHour === 20) ||
+                    event?.armoriqEnabled
+                      ? "text-emerald-950"
+                      : "text-slate-800"
+                  }`}
+                >
+                  {((dateKey.endsWith("-10-15") || dateKey === "2026-10-15") && startHour === 20)
+                    ? "🛡️ ArmorIQ Scheduled Gate Active (8 PM on 15 Oct)"
+                    : "ArmorIQ Zero-Trust Pre-Publish Gate"}
+                </span>
+              </div>
+              <span className="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded font-mono">
+                pol-pub-conditional
+              </span>
+            </div>
+
+            <p className="text-[11px] text-slate-600 leading-relaxed">
+              {((dateKey.endsWith("-10-15") || dateKey === "2026-10-15") && startHour === 20)
+                ? "This post is scheduled for 8:00 PM on 15 Oct. ArmorIQ will intercept, run pre-flight prompt injection scans, verify ad budget limits, and issue cryptographic Merkle signatures before dispatch."
+                : "ArmorIQ policy guardrails intercept prompt injection payloads, check budget caps, and cryptographically sign before publishing."}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                openArmoriqForEvent(
+                  event || {
+                    id: "evt-temp-gate",
+                    title: title || "Scheduled Post",
+                    date: dateKey,
+                    startHour,
+                    durationHours,
+                    displayTime: `${startHour > 12 ? startHour - 12 : startHour} PM`,
+                    color,
+                    armoriqEnabled: true,
+                  }
+                );
+              }}
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
+            >
+              <Zap className="size-3.5 text-emerald-400" />
+              <span>Run ArmorIQ Pre-Flight Security Check</span>
+            </button>
           </div>
 
           <div className="flex items-center justify-between pt-4 border-t border-slate-100">

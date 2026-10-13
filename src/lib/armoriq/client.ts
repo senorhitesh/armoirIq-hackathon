@@ -249,3 +249,4 @@ export class ArmorIQGovernanceEngine {
 
 // Global Singleton
 export const armorIQ = new ArmorIQGovernanceEngine();
+export const armorIQEngine = armorIQ;
