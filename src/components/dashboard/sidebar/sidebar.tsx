@@ -1,31 +1,19 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import SidebarContent from "@/components/dashboard/sidebar/sidebar-content";
+import SidebarNav from "@/components/dashboard/sidebar/sidebar-nav";
 import { useUiStore } from "@/stores/ui-store";
 import { ease } from "@/lib/easings";
-import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
   const sidebarOpen = useUiStore((state) => state.sidebarOpen);
   const setSidebarOpen = useUiStore((state) => state.setSidebarOpen);
-  const collapsed = useUiStore((state) => state.sidebarCollapsed);
-  const toggleCollapsed = useUiStore((state) => state.toggleSidebarCollapsed);
 
   return (
     <>
-      <aside
-        className={cn(
-          "border-slate-200 bg-sidebar ease-smooth-in-out hidden h-full shrink-0 flex-col overflow-hidden border-r transition-[width] duration-200 lg:flex",
-          collapsed ? "w-[60px]" : "w-[260px]",
-        )}
-      >
-        <SidebarContent
-          collapsed={collapsed}
-          onToggle={toggleCollapsed}
-          toggleLabel={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        />
-      </aside>
+      <div className="hidden h-full shrink-0 lg:flex">
+        <SidebarNav fill={true} />
+      </div>
       <AnimatePresence>
         {sidebarOpen && (
           <div className="fixed inset-0 z-40 lg:hidden">
@@ -42,13 +30,9 @@ export default function Sidebar() {
               animate={{ x: 0 }}
               exit={{ x: -260 }}
               transition={{ duration: 0.24, ease: ease.power3Out }}
-              className="bg-sidebar shadow-popover absolute inset-y-0 left-0 flex w-[260px] flex-col"
+              className="bg-sidebar shadow-popover absolute inset-y-0 left-0 flex flex-col"
             >
-              <SidebarContent
-                collapsed={false}
-                onToggle={() => setSidebarOpen(false)}
-                toggleLabel="Close menu"
-              />
+              <SidebarNav fill={true} />
             </motion.aside>
           </div>
         )}

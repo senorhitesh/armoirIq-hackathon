@@ -11,7 +11,8 @@ export type MessageType =
   | "post-list"
   | "command-result"
   | "error"
-  | "help";
+  | "help"
+  | "streaming";
 
 export interface PostPreview {
   id: string;
@@ -34,6 +35,7 @@ export interface ChatMessage {
   posts?: PostPreview[];
   postDetail?: PostPreview;
   commandUsed?: string;
+  streaming?: boolean;
 }
 
 export interface SlashCommand {
@@ -53,6 +55,7 @@ export const SLASH_COMMANDS: SlashCommand[] = [
   { command: "/publish", description: "Publish approved post to sandbox", usage: '/publish <post_name>', category: "action" },
   { command: "/score", description: "Get virality score for a post", usage: '/score <post_name>', category: "action" },
   { command: "/memory", description: "Use Agent Memory House shared blueprint to generate variations", usage: '/memory [slug] or hey /post-123 create 3 variation based on /memory-...', category: "action" },
+  { command: "/insights", description: "Stream live market intelligence & verified citations", usage: '/insights [query]', category: "action" },
   { command: "/help", description: "Show all available commands", usage: '/help', category: "info" },
 ];
 
@@ -808,6 +811,19 @@ export const useChatStore = create<ChatState>((set, get) => ({
           type: "command-result",
           content: `🔥 **Virality Score Analysis**\n\n📝 **"${task.title}"**\n\n🎯 Score: **${score}/100** (${score >= 80 ? "🟢 High" : score >= 60 ? "🟡 Medium" : "🔴 Low"} potential)\n📊 Confidence: **${confidence}%**\n\n**Top Factors:**\n${topReasons.map((r) => `• ✓ ${r}`).join("\n")}\n\n*Based on honest model — relative performance prediction from your own history. Not a guarantee.*\n🛡️ **ArmorIQ Verified:** Scored by Creator Agent under rule \`pol-creator-allow-workspace\`.`,
           commandUsed: "/score",
+        });
+        break;
+      }
+
+      case "/insights":
+      case "/stream": {
+        setTyping(false);
+        addMessage({
+          role: "assistant",
+          type: "streaming",
+          content: args ? `Streaming insights for "${args}"...` : "Live Market Intelligence & Source Citations",
+          commandUsed: "/insights",
+          streaming: true,
         });
         break;
       }

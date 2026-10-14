@@ -1,9 +1,49 @@
-import {
-  ArmorIQClient as SdkClient,
-  PolicyBlockedException,
-  IntentMismatchException,
-  InvalidTokenException
-} from '@armoriq/sdk';
+export class ArmorIQException extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ArmorIQException';
+    Object.setPrototypeOf(this, ArmorIQException.prototype);
+  }
+}
+
+export class PolicyBlockedException extends ArmorIQException {
+  enforcementAction?: string;
+  reason?: string;
+  metadata?: any;
+  matchedPolicy?: any;
+  constructor(message: string, enforcementAction?: string, reason?: string, metadata?: any, matchedPolicy?: any) {
+    super(message);
+    this.name = 'PolicyBlockedException';
+    this.enforcementAction = enforcementAction;
+    this.reason = reason;
+    this.metadata = metadata;
+    this.matchedPolicy = matchedPolicy;
+    Object.setPrototypeOf(this, PolicyBlockedException.prototype);
+  }
+}
+
+export class IntentMismatchException extends ArmorIQException {
+  action?: string;
+  planHash?: string;
+  constructor(message: string, action?: string, planHash?: string) {
+    super(message);
+    this.name = 'IntentMismatchException';
+    this.action = action;
+    this.planHash = planHash;
+    Object.setPrototypeOf(this, IntentMismatchException.prototype);
+  }
+}
+
+export class InvalidTokenException extends ArmorIQException {
+  tokenId?: string;
+  constructor(message: string, tokenId?: string) {
+    super(message);
+    this.name = 'InvalidTokenException';
+    this.tokenId = tokenId;
+    Object.setPrototypeOf(this, InvalidTokenException.prototype);
+  }
+}
+
 import {
   AgentRole,
   PlanStep,
@@ -44,8 +84,10 @@ export class ArmorIQGovernanceEngine {
 
   constructor() {
     this.apiKey = process.env.ARMORIQ_API_KEY || '';
-    if (this.apiKey && !this.apiKey.startsWith('demo_')) {
+    if (typeof window === 'undefined' && this.apiKey && !this.apiKey.startsWith('demo_')) {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { ArmorIQClient: SdkClient } = require('@armoriq/sdk');
         this.sdkClient = new SdkClient({
           apiKey: this.apiKey
         });

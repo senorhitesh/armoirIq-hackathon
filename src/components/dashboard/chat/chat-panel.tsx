@@ -4,6 +4,15 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useChatStore, SLASH_COMMANDS, type ChatMessage } from "@/stores/chat-store";
+import { cn } from "@/lib/utils";
+import {
+  Conversation,
+  ConversationBubble,
+  ConversationContent,
+  ConversationReactions,
+} from "@/components/_ui/conversation";
+import StreamingText from "@/components/_ui/streaming-text";
+import PromptBar from "@/components/_ui/prompt-bar";
 import {
   Send,
   Sparkles,
@@ -103,6 +112,8 @@ function getCommandIcon(cmd?: string) {
     case "/approve": return <ThumbsUp className="w-3.5 h-3.5" />;
     case "/publish": return <Rocket className="w-3.5 h-3.5" />;
     case "/score": return <Sparkles className="w-3.5 h-3.5" />;
+    case "/insights": return <Sparkles className="w-3.5 h-3.5 text-blue-500" />;
+    case "/stream": return <Sparkles className="w-3.5 h-3.5 text-blue-500" />;
     case "/memory": return <Brain className="w-3.5 h-3.5 text-purple-600" />;
     case "/help": return <HelpCircle className="w-3.5 h-3.5" />;
     default: return <Bot className="w-3.5 h-3.5" />;
@@ -257,13 +268,20 @@ function PostList({ posts }: { posts: NonNullable<ChatMessage["posts"]> }) {
 function MessageBubble({ msg }: { msg: ChatMessage }) {
   const isUser = msg.role === "user";
   const isError = msg.type === "error";
+  const [reaction, setReaction] = useState<string | null>(null);
+
+  const timeString = new Date(msg.timestamp).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12, scale: 0.97 }}
+      initial={{ opacity: 0, y: 10, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: "spring", stiffness: 380, damping: 28 }}
-      className={`flex items-start gap-3 px-4 ${isUser ? "flex-row-reverse" : ""}`}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className={`group/message flex items-start gap-3 px-4 w-full ${isUser ? "flex-row-reverse" : "flex-row"}`}
+      data-align={isUser ? "end" : "start"}
     >
       {/* Avatar */}
       <div
@@ -284,48 +302,104 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
         )}
       </div>
 
-      {/* Content */}
-      <div
-        className={`max-w-[80%] min-w-0 ${
-          isUser
-            ? "bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-2xl rounded-tr-md px-4 py-3 shadow-md shadow-slate-500/10"
-            : isError
-            ? "bg-rose-50 text-rose-900 rounded-2xl rounded-tl-md px-4 py-3 border border-rose-200 shadow-sm"
-            : "bg-white text-slate-800 rounded-2xl rounded-tl-md px-4 py-3 border border-slate-200 shadow-sm"
-        }`}
+      {/* Bubble Component */}
+      <ConversationBubble
+        align={isUser ? "end" : "start"}
+        variant={isUser ? "default" : isError ? "destructive" : "muted"}
+        sentAt={timeString}
+        defaultRevealed={true}
+        className="max-w-[82%]"
       >
-        {/* Command badge */}
-        {msg.commandUsed && !isUser && (
-          <div className="flex items-center gap-1.5 mb-2">
-            <span
-              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                isError
-                  ? "bg-rose-100 text-rose-700 border border-rose-200"
-                  : "bg-blue-50 text-blue-700 border border-blue-200"
-              }`}
-            >
-              {getCommandIcon(msg.commandUsed)}
-              {msg.commandUsed}
-            </span>
+        <ConversationContent
+          className={cn(
+            "relative text-sm shadow-xs transition-all",
+            isUser
+              ? "shadow-blue-500/10 font-normal"
+              : "border-slate-200/90 text-slate-800"
+          )}
+        >
+          {/* Command badge */}
+          {msg.commandUsed && !isUser && (
+            <div className="flex items-center gap-1.5 mb-2">
+              <span
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                  isError
+                    ? "bg-rose-100 text-rose-700 border border-rose-200"
+                    : "bg-blue-100 text-blue-700 border border-blue-200"
+                }`}
+              >
+                {getCommandIcon(msg.commandUsed)}
+                {msg.commandUsed}
+              </span>
+            </div>
+          )}
+
+          {/* Text or Streaming */}
+          {msg.streaming || msg.type === "streaming" ? (
+            <div className="py-1">
+              <StreamingText
+                fill={true}
+                loop={false}
+                onFollowUp={(text) => {
+                  useChatStore.getState().processCommand(text);
+                }}
+              />
+            </div>
+          ) : (
+            <div className={cn("leading-relaxed space-y-1.5", isUser ? "text-white selection:bg-white/30" : "text-slate-800")}>
+              {msg.type === "help" ? <HelpPanel /> : renderMarkdown(msg.content)}
+            </div>
+          )}
+
+          {/* Post detail card */}
+          {msg.postDetail && <InlinePostCard post={msg.postDetail} />}
+
+          {/* Post list */}
+          {msg.posts && msg.posts.length > 0 && <PostList posts={msg.posts} />}
+        </ConversationContent>
+
+        {/* Reaction badge */}
+        {reaction ? (
+          <ConversationReactions
+            side="bottom"
+            align={isUser ? "end" : "start"}
+            className="cursor-pointer hover:scale-110 transition-transform"
+            onClick={(e) => {
+              e.stopPropagation();
+              setReaction(null);
+            }}
+          >
+            <span>{reaction}</span>
+          </ConversationReactions>
+        ) : (
+          <div className="absolute -bottom-2 right-2 opacity-0 group-hover/bubble:opacity-100 transition-opacity">
+            <ConversationReactions side="bottom" align={isUser ? "end" : "start"} className="flex gap-1 py-0.5 px-1 bg-white/95 border border-slate-200 shadow-sm">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setReaction("👍");
+                }}
+                className="hover:scale-125 transition-transform text-xs p-0.5"
+                title="Thumbs up"
+              >
+                👍
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setReaction("✨");
+                }}
+                className="hover:scale-125 transition-transform text-xs p-0.5"
+                title="Sparkles"
+              >
+                ✨
+              </button>
+            </ConversationReactions>
           </div>
         )}
-
-        {/* Text */}
-        <div className={`text-sm leading-relaxed space-y-1 ${isUser ? "text-white/95" : ""}`}>
-          {msg.type === "help" ? <HelpPanel /> : renderMarkdown(msg.content)}
-        </div>
-
-        {/* Post detail card */}
-        {msg.postDetail && <InlinePostCard post={msg.postDetail} />}
-
-        {/* Post list */}
-        {msg.posts && msg.posts.length > 0 && <PostList posts={msg.posts} />}
-
-        {/* Timestamp */}
-        <div className={`mt-2 text-[10px] ${isUser ? "text-white/40" : "text-slate-400"}`}>
-          {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-        </div>
-      </div>
+      </ConversationBubble>
     </motion.div>
   );
 }
@@ -511,126 +585,77 @@ export default function ChatPanel() {
       {/* ─── Messages Area ─── */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto py-6 space-y-5"
+        className="flex-1 overflow-y-auto py-6"
       >
-        <AnimatePresence initial={false}>
-          {messages.map((msg) => (
-            <MessageBubble key={msg.id} msg={msg} />
-          ))}
-        </AnimatePresence>
-        {isTyping && <TypingIndicator />}
+        <Conversation className="space-y-4">
+          <AnimatePresence initial={false}>
+            {messages.map((msg) => (
+              <MessageBubble key={msg.id} msg={msg} />
+            ))}
+          </AnimatePresence>
+          {isTyping && <TypingIndicator />}
+        </Conversation>
       </div>
 
       {/* ─── Input Area ─── */}
-      <div className="shrink-0 border-t border-slate-200 bg-white/95 backdrop-blur-sm relative">
-        <AnimatePresence>
-          {showSlashMenu && (
-            <SlashMenu
-              filter={slashFilter}
-              onSelect={handleSlashSelect}
-              onClose={() => setShowSlashMenu(false)}
-            />
-          )}
-        </AnimatePresence>
-
-        <div className="px-4 py-3">
-          {/* Quick Shared Memory Prompts */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 text-[11px]">
-            <span className="text-slate-400 font-medium shrink-0 flex items-center gap-1">
-              <Brain className="size-3 text-slate-600" />
-              Shared Memory:
-            </span>
-            <button
-              type="button"
-              onClick={() => {
-                setInputValue("hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post");
-                inputRef.current?.focus();
-              }}
-              className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-800 border border-slate-200 px-2.5 py-0.5 font-medium shrink-0 transition-colors"
-            >
-              hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setInputValue("create 3 variation based on /memory-x-viral-thread");
-                inputRef.current?.focus();
-              }}
-              className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 px-2.5 py-0.5 font-medium shrink-0 transition-colors"
-            >
-              based on /memory-x-viral-thread
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setInputValue("/memory list");
-                inputRef.current?.focus();
-              }}
-              className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 px-2.5 py-0.5 font-mono shrink-0 transition-colors"
-            >
-              /memory list
-            </button>
-          </div>
-
-          <div
-            className={`flex items-end gap-3 rounded-2xl border p-3 transition-all duration-200 ${
-              isFocused
-                ? "border-blue-400 shadow-focus bg-white ring-1 ring-blue-200"
-                : "border-slate-200 bg-slate-50/80"
-            }`}
+      <div className="shrink-0 border-t border-slate-200 bg-white/95 backdrop-blur-sm relative px-4 py-3">
+        {/* Quick Shared Memory Prompts */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 text-[11px] mb-1">
+          <span className="text-slate-400 font-medium shrink-0 flex items-center gap-1">
+            <Brain className="size-3 text-purple-600" />
+            Shared Memory:
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              setInputValue("hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post");
+            }}
+            className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-800 border border-slate-200 px-2.5 py-0.5 font-medium shrink-0 transition-colors cursor-pointer"
           >
-            <div className="flex items-center gap-1.5 shrink-0 pb-0.5">
-              <button
-                onClick={() => {
-                  setShowSlashMenu(!showSlashMenu);
-                  if (!showSlashMenu) {
-                    setInputValue("/");
-                    setSlashFilter("/");
-                    inputRef.current?.focus();
-                  }
-                }}
-                className="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-all cursor-pointer"
-                title="Slash commands"
-              >
-                <Terminal className="w-4 h-4" />
-              </button>
-            </div>
+            hey /linkedpost-123 create 3 variation based on /memory-linked-launch-post
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setInputValue("create 3 variation based on /memory-x-viral-thread");
+            }}
+            className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 px-2.5 py-0.5 font-medium shrink-0 transition-colors cursor-pointer"
+          >
+            based on /memory-x-viral-thread
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setInputValue("/memory list");
+            }}
+            className="rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 px-2.5 py-0.5 font-mono shrink-0 transition-colors cursor-pointer"
+          >
+            /memory list
+          </button>
+        </div>
 
-            <textarea
-              ref={inputRef}
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              placeholder="Type a message or / for commands..."
-              rows={1}
-              className="flex-1 min-h-[36px] max-h-[120px] resize-none bg-transparent text-sm text-slate-800 placeholder:text-slate-400 outline-none leading-relaxed py-1.5"
-              style={{ overflow: "auto" }}
-            />
+        {/* ── PromptBar with Model Picker, Glimm Rainbow Shader, Sources & Dictation ── */}
+        <PromptBar
+          variant="Rounded"
+          demo={false}
+          value={inputValue}
+          onChange={setInputValue}
+          placeholder="Type a message or / for commands, @ for sources..."
+          onSend={(text) => {
+            if (!text || isTyping) return;
+            processCommand(text);
+            setInputValue("");
+          }}
+        />
 
-            <button
-              onClick={handleSend}
-              disabled={!inputValue.trim() || isTyping}
-              className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 cursor-pointer ${
-                inputValue.trim() && !isTyping
-                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/25 hover:shadow-lg hover:shadow-blue-500/30 scale-100 hover:scale-105"
-                  : "bg-slate-100 text-slate-400 cursor-not-allowed"
-              }`}
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between mt-2 px-1">
-            <span className="text-[11px] text-slate-400">
-              Type <code className="px-1 py-0.5 rounded bg-slate-100 text-blue-600 font-mono text-[10px]">/</code> for commands · <code className="px-1 py-0.5 rounded bg-slate-100 text-blue-600 font-mono text-[10px]">Enter</code> to send · <code className="px-1 py-0.5 rounded bg-slate-100 text-blue-600 font-mono text-[10px]">Shift+Enter</code> for new line
-            </span>
-            <span className="text-[10px] text-slate-400 flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3 text-emerald-500" />
-              ArmorIQ Protected
-            </span>
-          </div>
+        <div className="flex items-center justify-between mt-2 px-1">
+          <span className="text-[11px] text-slate-400">
+            Type <code className="px-1 py-0.5 rounded bg-slate-100 text-blue-600 font-mono text-[10px]">/</code> for commands · <code className="px-1 py-0.5 rounded bg-slate-100 text-blue-600 font-mono text-[10px]">@</code> for data sources · <code className="px-1 py-0.5 rounded bg-slate-100 text-blue-600 font-mono text-[10px]">Enter</code> to send
+          </span>
+          <span className="text-[10px] text-slate-400 flex items-center gap-1 font-medium">
+            <ShieldCheck className="w-3 h-3 text-emerald-500" />
+            ArmorIQ Policy Verified
+          </span>
         </div>
       </div>
     </div>
