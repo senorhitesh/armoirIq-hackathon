@@ -163,9 +163,6 @@ Next.js 16 App Router (UI + API routes)
     ├── trends-mcp       (/api/mcp/trends)
     ├── workspace-mcp    (/api/mcp/workspace)
     └── publisher-mcp    (/api/mcp/publisher)
-```
-
----
 
 ## 📝 90-Second Demo Video Script
 
